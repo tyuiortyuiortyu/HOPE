@@ -32,7 +32,11 @@ const RootLayout = () => {
   }
 
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: "fade_from_bottom",
+      }}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
       <Stack.Screen name="(auth)/register" options={{ headerShown: false }} />
