@@ -19,14 +19,14 @@ const TabsLayout = () => {
           borderTopColor: '#9B9B9B',
           height: Platform.OS === 'android' ? height * 0.1 : height * 0.08,
           paddingTop: height * 0.015,
-        }
+        },
+        headerShown: false,
       }}
     >
       <Tabs.Screen 
         name='home'
         options={{
           title: "Home",
-          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <View className='flex items-center justify-center' >
               <Image
@@ -49,7 +49,6 @@ const TabsLayout = () => {
         name='volunteer'
         options={{
           title: "Volunteer",
-          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <View className='flex items-center justify-center' >
               <Image
@@ -72,7 +71,6 @@ const TabsLayout = () => {
         name='donate'
         options={{
           title: "Donate",
-          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <View className='flex items-center justify-center' >
               <Image
@@ -95,7 +93,6 @@ const TabsLayout = () => {
         name='donor'
         options={{
           title: "Donor",
-          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <View className='flex items-center justify-center' >
               <Image
@@ -118,7 +115,6 @@ const TabsLayout = () => {
         name='track'
         options={{
           title: "Track",
-          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <View className='flex items-center justify-center' >
               <Image
