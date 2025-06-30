@@ -1,237 +1,240 @@
-import { Text, View, Alert, TextInput, TouchableOpacity, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { 
+  Text, 
+  View, 
+  Alert, 
+  TextInput, 
+  TouchableOpacity, 
+  Image, 
+  SafeAreaView,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import images from '../../constants/images';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Register = () => {
     const [name, setName] = useState('');
-    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+    
     const [isMinLengthMet, setIsMinLengthMet] = useState(false);
     const [hasLowercase, setHasLowercase] = useState(false);
     const [hasUppercase, setHasUppercase] = useState(false);
     const [hasNumber, setHasNumber] = useState(false);
+    
+    const router = useRouter();
 
     useEffect(() => {
         setIsMinLengthMet(password.length >= 8);
         setHasLowercase(/[a-z]/.test(password));
         setHasUppercase(/[A-Z]/.test(password));
         setHasNumber(/\d/.test(password));
-    }, [password])
+    }, [password]);
 
     const isPasswordValid = () => {
         return isMinLengthMet && hasLowercase && hasUppercase && hasNumber;
-    }
+    };
 
     const handleRegister = () => {
         if (!name || !username || !email || !password || !confirmPassword) {
-            Alert.alert('Error', 'All fields are required');
+            Alert.alert('Error', 'Semua field harus diisi');
             return;
         }
-
         if (password !== confirmPassword) {
-            Alert.alert('Error', 'Passwords do not match');
+            Alert.alert('Error', 'Password tidak sama');
             return;
         }
-        
         if (!isPasswordValid()) {
-            Alert.alert('Error', 'Password does not meet requirements');
+            Alert.alert('Error', 'Password tidak memenuhi syarat');
             return;
         }
-
-        if (!email.includes('@')) {
-            Alert.alert('Error', 'Please enter a valid email address');
-            return;
-        }
-
-        // This is just a frontend demo - no actual registration occurs
-        Alert.alert('Success', `Welcome, ${name}! (Demo - no actual registration)`);
+        Alert.alert('Success', `Selamat datang, ${name}!`);
+        router.push("login");
     };
 
     const renderValidationItem = (condition, text) => (
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 2, width: '50%' }}>
+        <View className="flex-row items-center my-1">
             <Ionicons
                 name={condition ? "checkmark-circle" : "ellipse-outline"}
-                size={18}
-                color={condition ? "#50C878" : "#bbb"}
-                style={{ marginRight: 5 }}
+                size={16}
+                color={condition ? "#10B981" : "#D1D5DB"}
+                style={{ marginRight: 8 }}
             />
-            <Text style={{ color: condition ? '#000' : '#8A8A8A' }}>{text}</Text>
+            <Text className={`text-xs ${condition ? 'text-green-600' : 'text-gray-400'}`}>
+                {text}
+            </Text>
         </View>
     );
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#f9f9f9', alignItems: 'center', justifyContent: 'center' }}>
-            {/* Header */}
-            <Text style={{ fontSize: 25, textAlign: 'center', fontWeight: 'bold', padding: 35, color: "#82BFB7" }}>Register</Text>
-
-            {/* Input Fields */}
-            <TextInput 
-                style={{
-                    width: '85%', 
-                    borderWidth: 1, 
-                    borderColor: '#ddd', 
-                    padding: 16, 
-                    borderRadius: 8, 
-                    marginBottom: 20,
-                    backgroundColor: '#fff', 
-                    fontSize: 16, 
-                    elevation: 5
-                }}
-                placeholder="Enter your name"
-                placeholderTextColor="#8A8A8A"
-                value={name}
-                onChangeText={setName}
-            />
-
-            <TextInput 
-                style={{
-                    width: '85%', 
-                    borderWidth: 1, 
-                    borderColor: '#ddd', 
-                    padding: 16, 
-                    borderRadius: 8, 
-                    marginBottom: 20,
-                    backgroundColor: '#fff', 
-                    fontSize: 16, 
-                    elevation: 5
-                }}
-                placeholder="Enter your email address"
-                placeholderTextColor="#8A8A8A"
-                keyboardType="email-address"
-                value={email}
-                onChangeText={setEmail}
-            />
-            
-            <TextInput 
-                style={{
-                    width: '85%', 
-                    borderWidth: 1, 
-                    borderColor: '#ddd', 
-                    padding: 16, 
-                    borderRadius: 8, 
-                    marginBottom: 20,
-                    backgroundColor: '#fff', 
-                    fontSize: 16, 
-                    elevation: 5
-                }}
-                placeholder="Enter your username"
-                placeholderTextColor="#8A8A8A"
-                value={username}
-                onChangeText={setUsername}
-            />
-            
-            {/* Password Input */}
-            <View style={{
-                flexDirection: 'row', 
-                alignItems: 'center', 
-                width: '85%', 
-                borderWidth: 1, 
-                borderColor: '#ddd',
-                backgroundColor: '#fff', 
-                borderRadius: 8, 
-                marginBottom: 10, 
-                paddingHorizontal: 10, 
-                elevation: 5
-            }}>
-                <TextInput 
-                    style={{ flex: 1, fontSize: 16, paddingVertical: 12, color: '#000' }}
-                    placeholder="Enter your password"
-                    placeholderTextColor="#8A8A8A"
-                    secureTextEntry={!showPassword}
-                    value={password}
-                    onChangeText={setPassword}
-                />
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    <Ionicons
-                        name={showPassword ? "eye-outline" : "eye-off-outline"}
-                        size={24}
-                        color="#aaa"
-                    />
-                </TouchableOpacity>
-            </View>
-            
-            {/* Password validation requirements */}
-            <View style={{ width: '85%', marginBottom: 10, paddingLeft: 10, flexDirection: 'row', flexWrap: 'wrap' }}>
-                {renderValidationItem(isMinLengthMet, "Min. 8 characters")}
-                {renderValidationItem(hasLowercase, "Lowercase letter")}
-                {renderValidationItem(hasUppercase, "Uppercase letter")}
-                {renderValidationItem(hasNumber, "Number")}
-            </View>
-            
-            {/* Confirm Password Input */}
-            <View style={{
-                flexDirection: 'row', 
-                alignItems: 'center', 
-                width: '85%', 
-                borderWidth: 1, 
-                borderColor: '#ddd',
-                backgroundColor: '#fff', 
-                borderRadius: 8, 
-                marginBottom: 20, 
-                paddingHorizontal: 10, 
-                elevation: 5
-            }}>
-                <TextInput 
-                    style={{ flex: 1, fontSize: 16, paddingVertical: 12, color: '#000' }}
-                    placeholder="Confirm your password"
-                    placeholderTextColor="#8A8A8A"
-                    secureTextEntry={!showConfirmPassword}
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                />
-                <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-                    <Ionicons
-                        name={showConfirmPassword ? "eye-outline" : "eye-off-outline"}
-                        size={24}
-                        color="#aaa"
-                    />
-                </TouchableOpacity>
-            </View>
-
-            {/* Register Button */}
-            <TouchableOpacity 
-                style={{ 
-                    backgroundColor: '#E7E8EE', 
-                    padding: 18, 
-                    borderRadius: 10, 
-                    alignItems: 'center', 
-                    width: '65%', 
-                    marginBottom: 17 
-                }}
-                onPress={handleRegister}
+        <SafeAreaView className="flex-1 bg-white">
+            <KeyboardAvoidingView 
+                className="flex-1" 
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
-                <Text style={{ color: '#000000', fontSize: 16, fontWeight: 'bold' }}>Register</Text>
-            </TouchableOpacity>
+                {/* Header */}
+                <View className="flex-row items-center justify-between px-6 py-4">
+                    <TouchableOpacity onPress={() => router.back()}>
+                        <Ionicons name="arrow-back" size={24} color="#1F2937" />
+                    </TouchableOpacity>
+                    <Text className="text-lg font-semibold text-gray-900">Daftar</Text>
+                    <View className="w-6" />
+                </View>
 
-            {/* Login Navigation */}
-            <Text style={{ fontSize: 16, color: '#555' }}>
-                Already have an account? <Text style={{ color: '#2B4763', fontWeight: 'bold' }}>Log In</Text>
-            </Text>
+                <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
+                    {/* Welcome Text */}
+                    <View className="mb-6">
+                        <Text className="text-2xl font-bold text-gray-900 mb-2">
+                            Bergabunglah dengan kami
+                        </Text>
+                        <Text className="text-gray-600 text-base">
+                            Daftarkan akun untuk mulai berbagi kebaikan
+                        </Text>
+                    </View>
 
-            {/* More Login Methods */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20, width: '75%' }}>
-                <View style={{ flex: 1, height: 1, backgroundColor: '#EDEEF2' }} />
-                <Text style={{ marginHorizontal: 10, color: '#ADB0BB', fontSize: 14, fontWeight: 'bold' }}>
-                   More Login Methods
-                </Text>
-                <View style={{ flex: 1, height: 1, backgroundColor: '#EDEEF2' }} />
-            </View>
+                    {/* Form */}
+                    <View className="space-y-4">
+                        {/* Name Input */}
+                        <View>
+                            <Text className="text-sm font-medium text-gray-700 mb-2">
+                                Nama Lengkap
+                            </Text>
+                            <TextInput 
+                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-base"
+                                placeholder="Masukkan nama lengkap"
+                                placeholderTextColor="#9CA3AF"
+                                value={name}
+                                onChangeText={setName}
+                            />
+                        </View>
 
-            {/* Social Media Icons */}
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 2, marginBottom: 45 }}>
-                <Image source={images.google} style={{ width: 50, height: 50, resizeMode: 'contain', marginHorizontal: 10 }} />
-                <Image source={images.apple} style={{ width: 50, height: 50, resizeMode: 'contain', marginHorizontal: 10 }} />
-                <Image source={images.facebook} style={{ width: 50, height: 50, resizeMode: 'contain', marginHorizontal: 10 }} />
-                <Image source={images.twitter} style={{ width: 50, height: 50, resizeMode: 'contain', marginHorizontal: 10 }} />
-            </View>
-        </View>
+                        {/* Email Input */}
+                        <View>
+                            <Text className="text-sm font-medium text-gray-700 mb-2">
+                                Email
+                            </Text>
+                            <TextInput 
+                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-base"
+                                placeholder="Masukkan alamat email"
+                                placeholderTextColor="#9CA3AF"
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                                value={email}
+                                onChangeText={setEmail}
+                            />
+                        </View>
+                        
+                        {/* Username Input */}
+                        <View>
+                            <Text className="text-sm font-medium text-gray-700 mb-2">
+                                Username
+                            </Text>
+                            <TextInput 
+                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-base"
+                                placeholder="Masukkan username"
+                                placeholderTextColor="#9CA3AF"
+                                autoCapitalize="none"
+                                value={username}
+                                onChangeText={setUsername}
+                            />
+                        </View>
+                        
+                        {/* Password Input */}
+                        <View>
+                            <Text className="text-sm font-medium text-gray-700 mb-2">
+                                Password
+                            </Text>
+                            <View className="relative">
+                                <TextInput 
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 pr-12 text-base"
+                                    placeholder="Masukkan password"
+                                    placeholderTextColor="#9CA3AF"
+                                    secureTextEntry={!showPassword}
+                                    value={password}
+                                    onChangeText={setPassword}
+                                />
+                                <TouchableOpacity 
+                                    className="absolute right-4 top-4"
+                                    onPress={() => setShowPassword(!showPassword)}
+                                >
+                                    <Ionicons
+                                        name={showPassword ? "eye-outline" : "eye-off-outline"}
+                                        size={20}
+                                        color="#6B7280"
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                            
+                            {/* Password validation */}
+                            <View className="mt-3 bg-gray-50 rounded-lg p-3">
+                                <Text className="text-xs font-medium text-gray-700 mb-2">Password harus mengandung:</Text>
+                                <View className="flex-row flex-wrap">
+                                    <View className="w-1/2">
+                                        {renderValidationItem(isMinLengthMet, "Min. 8 karakter")}
+                                        {renderValidationItem(hasLowercase, "Huruf kecil")}
+                                    </View>
+                                    <View className="w-1/2">
+                                        {renderValidationItem(hasUppercase, "Huruf kapital")}
+                                        {renderValidationItem(hasNumber, "Angka")}
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                        
+                        {/* Confirm Password Input */}
+                        <View>
+                            <Text className="text-sm font-medium text-gray-700 mb-2">
+                                Konfirmasi Password
+                            </Text>
+                            <View className="relative">
+                                <TextInput 
+                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 pr-12 text-base"
+                                    placeholder="Konfirmasi password"
+                                    placeholderTextColor="#9CA3AF"
+                                    secureTextEntry={!showConfirmPassword}
+                                    value={confirmPassword}
+                                    onChangeText={setConfirmPassword}
+                                />
+                                <TouchableOpacity 
+                                    className="absolute right-4 top-4"
+                                    onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                                >
+                                    <Ionicons
+                                        name={showConfirmPassword ? "eye-outline" : "eye-off-outline"}
+                                        size={20}
+                                        color="#6B7280"
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+
+                    {/* Register Button */}
+                    <TouchableOpacity 
+                        className="w-full rounded-xl py-4 mt-8"
+                        style={{ backgroundColor: "#82BFB7" }}
+                        onPress={handleRegister}
+                    >
+                        <Text className="text-white text-base font-semibold text-center">Daftar</Text>
+                    </TouchableOpacity>
+
+                    {/* Login Link */}
+                    <View className="flex-row justify-center items-center mt-6 mb-8">
+                        <Text className="text-gray-600">Sudah punya akun? </Text>
+                        <TouchableOpacity onPress={() => router.push("login")}>
+                            <Text style={{ color: "#82BFB7" }} className="font-medium">Masuk sekarang</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 };
 

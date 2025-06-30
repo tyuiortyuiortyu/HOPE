@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import {
-  StyleSheet,
   Text,
   View,
-  Image,
   TextInput,
   TouchableOpacity,
   Alert,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { Image } from "react-native";
 import images from "../../constants/images";
 
 const Login = () => {
@@ -18,86 +20,140 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
-  // Simplified login function without backend
   const handleLogin = () => {
     if (!email || !password) {
       Alert.alert("Validation", "Please fill in both email and password");
       return;
     }
-
-    // Simulate successful login
     Alert.alert("Login Success", "You are logged in!");
     router.push("../(tabs)/home");
   };
 
   return (
-    <View style={{ backgroundColor: "#FFFFFF", flex: 1, justifyContent: "center", alignItems: "center", paddingBottom: 20 }}>
-      <View style={{ marginRight: 20, paddingRight: 30, marginBottom: 60 }}>
-        <Text style={{ textAlign: "center", fontSize: 30, fontWeight: "bold", color: "#82BFB7" }}>
-          Welcome Back
-        </Text>
-        <Text style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>
-          Login to your account
-        </Text>
-      </View>
-
-      <View style={{ marginBottom: 50 }}>
-        <View style={{ backgroundColor: "#ffff", flexDirection: "row", width: "85%", height: 60, borderRadius: 10, elevation: 15, marginBottom: 10, alignItems: "center" }}>
-          <TextInput
-            style={{ flex: 1, paddingLeft: 10, fontSize: 16, textAlign: "left", textAlignVertical: "center" }}
-            placeholder="Enter your email address"
-            value={email}
-            onChangeText={setEmail}
-          />
-        </View>
-
-        <View style={{ backgroundColor: "#ffff", flexDirection: "row", width: "85%", height: 60, borderRadius: 10, elevation: 15, marginBottom: 10, alignItems: "center", paddingRight: 10 }}>
-          <TextInput
-            style={{ flex: 1, paddingLeft: 10, fontSize: 16, textAlign: "left", textAlignVertical: "center", paddingRight: 30 }}
-            placeholder="Enter your password"
-            value={password}
-            secureTextEntry={!showPassword}
-            onChangeText={setPassword}
-          />
-          <TouchableOpacity onPress={() => setShowPassword((prev) => !prev)}>
-            <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={24} color="#aaa" />
-          </TouchableOpacity>
-        </View>
-
-        <Text style={{ left: 220, width: "78%", marginTop: 5 }} onPress={() => router.push("./register.tsx")}>
-          Forgot Password
-        </Text>
-      </View>
-
-      <TouchableOpacity
-        style={{ backgroundColor: "#E7E8EE", width: "70%", height: 60, justifyContent: "center", alignItems: "center", marginTop: 20, borderRadius: 10 }}
-        onPress={handleLogin}
+    <SafeAreaView className="flex-1 bg-white">
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <Text style={{ color: "#000000", fontSize: 18, textAlign: "center", fontWeight: "bold" }}>Login</Text>
-      </TouchableOpacity>
+        {/* Header */}
+        <View className="flex-row items-center justify-between px-6 py-4">
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={24} color="#1F2937" />
+          </TouchableOpacity>
+          <Text className="text-lg font-semibold text-gray-900">Masuk</Text>
+          <View className="w-6" />
+        </View>
 
-      <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 20, width: "75%" }}>
-        <View style={{ flex: 1, height: 1, backgroundColor: "#EDEEF2" }} />
-        <Text style={{ color: "#ADB0BB", fontSize: 14, fontWeight: "bold", textAlign: "center" }}>Or Login with</Text>
-        <View style={{ flex: 1, height: 1, backgroundColor: "#EDEEF2" }} />
-      </View>
+        <View className="flex-1 px-6">
+          {/* Welcome Text */}
+          <View className="mb-8 mt-4">
+            <Text className="text-2xl font-bold text-gray-900 mb-2">
+              Selamat datang kembali
+            </Text>
+            <Text className="text-gray-600 text-base">
+              Masuk ke akun Anda untuk melanjutkan berbagi kebaikan
+            </Text>
+          </View>
 
-      <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 70 }}>
-        <Image source={images.google} style={{ width: 50, height: 50, resizeMode: "contain", marginHorizontal: 10, marginTop: 10 }} />
-        <Image source={images.apple} style={{ width: 50, height: 50, resizeMode: "contain", marginHorizontal: 10, marginTop: 10 }} />
-        <Image source={images.facebook} style={{ width: 50, height: 50, resizeMode: "contain", marginHorizontal: 10, marginTop: 10 }} />
-        <Image source={images.twitter} style={{ width: 50, height: 50, resizeMode: "contain", marginHorizontal: 10, marginTop: 10 }} />
-      </View>
+          {/* Form */}
+          <View className="space-y-4">
+            {/* Email Input */}
+            <View>
+              <Text className="text-sm font-medium text-gray-700 mb-2">
+                Email atau Username
+              </Text>
+              <TextInput
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-base focus:border-blue-500"
+                placeholder="Masukkan email atau username"
+                placeholderTextColor="#9CA3AF"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+              />
+            </View>
 
-      <View style={{ marginTop: 5 }}>
-        <Text style={{ fontSize: 18, textAlign: "center" }}>
-          Don't have an account?{" "}
-          <Text style={{ color: "#2B4763", fontWeight: "bold" }} onPress={() => router.push("./register.tsx")}>
-            Register
-          </Text>
-        </Text>
-      </View>
-    </View>
+            {/* Password Input */}
+            <View>
+              <Text className="text-sm font-medium text-gray-700 mb-2">
+                Password
+              </Text>
+              <View className="relative">
+                <TextInput
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 pr-12 text-base focus:border-blue-500"
+                  placeholder="Masukkan password"
+                  placeholderTextColor="#9CA3AF"
+                  value={password}
+                  secureTextEntry={!showPassword}
+                  onChangeText={setPassword}
+                />
+                <TouchableOpacity
+                  className="absolute right-4 top-4"
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-outline" : "eye-off-outline"}
+                    size={20}
+                    color="#6B7280"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Forgot Password */}
+            <TouchableOpacity
+              className="self-end"
+              onPress={() => router.push("forgot-password")}
+            >
+              <Text className="text-sm text-blue-600 font-medium">
+                Lupa password?
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Login Button */}
+          <TouchableOpacity
+            className="w-full rounded-xl py-4 mt-8"
+            style={{ backgroundColor: "#82BFB7" }}
+            onPress={handleLogin}
+          >
+            <Text className="text-white text-base font-semibold text-center">
+              Masuk
+            </Text>
+          </TouchableOpacity>
+
+          {/* Divider */}
+          <View className="flex-row items-center my-8">
+            <View className="flex-1 h-px bg-gray-200" />
+            <Text className="px-4 text-sm text-gray-500">atau masuk dengan</Text>
+            <View className="flex-1 h-px bg-gray-200" />
+          </View>
+
+          {/* Social Login */}
+          <View className="flex-row justify-center space-x-4 mb-6">
+            <TouchableOpacity className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center">
+              <Image source={images.google} className="w-6 h-6" />
+            </TouchableOpacity>
+            <TouchableOpacity className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center">
+              <Image source={images.facebook} className="w-6 h-6" />
+            </TouchableOpacity>
+            <TouchableOpacity className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center">
+              <Image source={images.apple} className="w-6 h-6" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Register Link */}
+          <View className="flex-row justify-center items-center">
+            <Text className="text-gray-600">Belum punya akun? </Text>
+            <TouchableOpacity onPress={() => router.push("register")}>
+              <Text style={{ color: "#82BFB7" }} className="font-medium">
+                Daftar sekarang
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
