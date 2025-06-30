@@ -37,7 +37,7 @@ const Welcome = () => {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => router.push("../(tabs)/home")}>
+      <TouchableOpacity onPress={() => router.push("/(tabs)/home")}>
         <Text style={styles.guestText}>Continue as a guest</Text>
       </TouchableOpacity>
     </View>
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 80,
     paddingHorizontal: 20,
+    backgroundColor: "white",
   },
 
   logoContainer: {
@@ -98,14 +99,16 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#F3F4F6",
     borderRadius: 10,
     marginBottom: 15,
     justifyContent: "center",
     alignItems: "center",
     width: "85%",
     paddingVertical: 20,
-    elevation: 15,
+    elevation: 3,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
   },
 
   buttonText: {

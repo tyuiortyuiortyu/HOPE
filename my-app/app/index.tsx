@@ -10,7 +10,7 @@ const App = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsSplashVisible(false); // Sembunyikan Splash setelah 3 detik
+      setIsSplashVisible(false);
     }, 4000);
 
     return () => clearTimeout(timer);
@@ -24,7 +24,7 @@ const App = () => {
         <View className="flex-1 justify-center items-center">
           <Text className="text-3xl font-yLight">HOPE</Text>
           <Link href={"(auth)/welcome"} className="text-xs">
-            Go to login
+            Go to welcome
           </Link>
         </View>
       )}
