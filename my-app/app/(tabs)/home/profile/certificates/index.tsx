@@ -84,7 +84,7 @@ const CertificateListScreen = () => {
           <CertificateCard 
             key={cert.id} 
             certificate={cert} 
-            onPress={() => router.push(`/home/certificates/${cert.id}`)} // Navigasi ke detail
+            onPress={() => router.push(`/home/profile/certificates/${cert.id}`)} // Navigasi ke detail
           />
         ))}
       </ScrollView>
