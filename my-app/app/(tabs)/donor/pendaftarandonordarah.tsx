@@ -114,6 +114,11 @@ const PendaftaranDonorDarahScreen = () => {
           </View>
         ) : (
           <>
+          <View className="w-full h-16 bg-[#C6E6E3] px-5 flex-row items-center">
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons name="arrow-back" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
             <Image source={evenImage} style={{ width: '100%', height: 220 }} resizeMode="cover" />
             <View style={{ padding: 20 }}>
               <View style={{ marginBottom: 24 }}>

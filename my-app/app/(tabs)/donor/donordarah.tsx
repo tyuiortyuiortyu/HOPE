@@ -12,6 +12,8 @@ import {
 import { Link, Stack } from 'expo-router'; // Import Stack
 import images from '../../../constants/images';
 import icons from '../../../constants/icons';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 
 // Data Dummy (tidak ada perubahan)
 const eventsData = [ { id: '1', title: 'Kegiatan Donor Darah Yayasan Buddha Tzu Chi', address: 'Jl. H.O.S Cokroaminoto No. 98, Bogor.', date: 'Selasa, 17 Juni 2025', image: images.donorDarah_1, }, { id: '2', title: 'Kegiatan Donor Darah RTB Gold', address: 'Jl. Pakuan No.03 Taman Budaya, Bogor.', date: 'Sabtu, 20 Juni 2025', image: images.donorDarah_2, }, { id: '3', title: 'Kegiatan Donor Darah Hari Ibu Internasional', address: 'Jl. MH. Thamrin, Citaringgul, Babakan Madang, Bogor', date: 'Sabtu, 20 Juni 2025', image: images.donorDarah_3, }, ];
@@ -65,6 +67,7 @@ const BenefitItem = ({ item }) => (
 const DonorDarahScreen = () => {
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -87,11 +90,15 @@ const DonorDarahScreen = () => {
         }} 
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Spacer untuk header transparan */}
-        <View className="h-[20px]" /> 
-        
+        {/* Header Manual dengan Tombol Back */}
+        <View className="w-full h-16 bg-[#82C7C1] px-5 flex-row items-center">
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+                
         {/* --- Bagian Kegiatan Terdekat --- */}
-        <View className="px-5 mb-5">
+        <View className="px-5 mb-5 mt-5">
           <Text className="text-xl font-bold text-gray-800 mb-4">Ikuti Kegiatan Donor Darah Terdekat</Text>
           {eventsData.map(item => <EventCard key={item.id} item={item} />)}
         </View>

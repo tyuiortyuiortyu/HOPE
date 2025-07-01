@@ -10,6 +10,9 @@ import {
 import { Link, Stack } from 'expo-router';
 import images from '../../../constants/images'; // Pastikan path ini benar
 import icons from '../../../constants/icons';   // Pastikan path ini benar
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+
 
 // --- DATA DUMMY UNTUK DONOR ASI ---
 
@@ -91,34 +94,35 @@ const BenefitItem = ({ item }) => (
 // --- HALAMAN UTAMA DONOR ASI ---
 
 const DonorAsiScreen = () => {
+  const router = useRouter();
+
   return (
-    <SafeAreaView className="flex-1 bg-[#fff]">
-      {/* --- PERUBAHAN 1: Konfigurasi header dari layout agar transparan --- */}
+    <SafeAreaView className="flex-1 bg-white" edges={['right', 'bottom', 'left']}>
       <Stack.Screen 
         options={{
-          headerTransparent: true, // Membuat header transparan
-          headerTitle: "", // Menghilangkan judul default
+          headerTransparent: true,
+          headerTitle: "",
           headerShadowVisible: false,
-          // Tombol back akan di-handle oleh _layout.tsx Anda,
-          // atau bisa ditambahkan di sini jika perlu
         }} 
       />
-      
-      {/* --- PERUBAHAN 2: Gunakan ScrollView sebagai container utama --- */}
-      <ScrollView showsVerticalScrollIndicator={false}>
+
+      <ScrollView showsVerticalScrollIndicator={false} className="bg-white">
         
-        {/* --- PERUBAHAN 3: Spacer untuk memberi ruang di bawah header transparan --- */}
-        <View className="h-[20px]" />
+        {/* Custom Header Full to Top */}
+        <View className="w-full h-16 bg-[#82C7C1] px-5 flex-row items-center">
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
 
         {/* Hero Section */}
-        <View className="px-5">
-            
-                <Text className="text-xl font-bold text-gray-800 mb-2">Satu Tetes untuk Harapan</Text>
-                <Image 
-                    source={images.bayi_prematur}
-                    className="w-full h-48 rounded-lg"
-                    resizeMode="cover"
-                />
+        <View className="px-5 mt-4">
+          <Text className="text-xl font-bold text-gray-800 mb-2">Satu Tetes untuk Harapan</Text>
+          <Image 
+            source={images.bayi_prematur}
+            className="w-full h-48 rounded-lg"
+            resizeMode="cover"
+          />
         </View>
 
         {/* Location List Section */}
