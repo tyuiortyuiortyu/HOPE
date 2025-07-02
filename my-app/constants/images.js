@@ -25,4 +25,9 @@ export default {
     persiapan_daging,
     bayi_prematur,
     EMC_sentul,
+    profilePlaceholder: require('../assets/images/profile_placeholder.png'),
+    sertifikatBCA: require('../assets/images/sertifikat_bca.png'),
+    sertifikatHealth: require('../assets/images/sertifikat_health.png'),
+    sertifikatAnimal: require('../assets/images/sertifikat_animal.png'),
+    aboutUs: require('../assets/images/about_us_image.png'),
 }
