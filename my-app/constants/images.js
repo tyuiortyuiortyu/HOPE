@@ -34,4 +34,9 @@ export default {
     volunteer2,
     volunteer3,
     Logo1,
+    profilePlaceholder: require('../assets/images/profile_placeholder.png'),
+    sertifikatBCA: require('../assets/images/sertifikat_bca.png'),
+    sertifikatHealth: require('../assets/images/sertifikat_health.png'),
+    sertifikatAnimal: require('../assets/images/sertifikat_animal.png'),
+    aboutUs: require('../assets/images/about_us_image.png'),
 }

@@ -424,7 +424,8 @@ const HomeScreen = () => {
                 <Ionicons name="notifications-outline" size={20} color="white" />
               </TouchableOpacity>
               
-              <TouchableOpacity className="w-10 h-10 rounded-full bg-white/20 items-center justify-center">
+              <TouchableOpacity className="w-10 h-10 rounded-full bg-white/20 items-center justify-center"
+                onPress={() => router.push('home/profile/profile')}>
                 <Ionicons name="person-circle-outline" size={24} color="white" />
               </TouchableOpacity>
             </View>

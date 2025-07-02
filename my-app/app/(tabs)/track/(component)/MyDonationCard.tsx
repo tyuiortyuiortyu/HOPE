@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 18,
+    fontSize: 12,
     fontWeight: '500',
     flex: 1,
     marginRight: 8,
@@ -115,16 +115,16 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 999,
     alignSelf: 'flex-start',
-    marginLeft: 8,
+    marginLeft: 2,
   },
   statusText: {
     color: '#fff',
     fontWeight: '500',
-    fontSize: 14,
+    fontSize: 10,
   },
   dateText: {
     color: '#888',
-    fontSize: 14,
+    fontSize: 9,
     marginTop: 8,
   },
   progressBarBg: {
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     height: 16,
     backgroundColor: '#e0e0e0',
     borderRadius: 8,
-    marginTop: 12,
+    marginTop: 4,
     overflow: 'hidden',
   },
   progressBarFill: {
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   amountText: {
-    fontSize: 15,
+    fontSize: 10,
     color: '#222',
   },
 })
