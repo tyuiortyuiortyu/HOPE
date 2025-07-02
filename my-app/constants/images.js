@@ -11,6 +11,11 @@ import donorDarah_3 from "../assets/images/Donordarah_3.png";
 import persiapan_daging from "../assets/images/persiapan_daging.jpg";
 import bayi_prematur from "../assets/images/bayi_prematur.png";
 import EMC_sentul from "../assets/images/EMC_sentul.jpg";
+import volunteer1 from "../assets/images/volunteer1.png";
+import volunteer2 from "../assets/images/volunteer2.png";
+import volunteer3 from "../assets/images/volunteer3.png";
+import Logo1 from "../assets/images/Logo1.png";
+// import logo from "../assets/images/logo.png";
 export default {
     logo,
     apple,
@@ -25,6 +30,10 @@ export default {
     persiapan_daging,
     bayi_prematur,
     EMC_sentul,
+    volunteer1,
+    volunteer2,
+    volunteer3,
+    Logo1,
     profilePlaceholder: require('../assets/images/profile_placeholder.png'),
     sertifikatBCA: require('../assets/images/sertifikat_bca.png'),
     sertifikatHealth: require('../assets/images/sertifikat_health.png'),
