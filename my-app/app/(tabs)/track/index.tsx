@@ -20,7 +20,7 @@ const TrackIndex = () => {
           <View style={styles.circle} />
           <Text style={styles.optionText}>XXx Berdonasi</Text>
         </View>
-        <View style={{ height: 16 }} />
+        <View style={{ height: 8 }} />
         <View style={styles.row}>
           <View style={styles.circle} />
           <Text style={styles.optionText}>XXx Menjadi Relawan</Text>
@@ -68,7 +68,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#c9e9e7',
     borderRadius: 24,
-    padding: 24,
+    padding: 12,
+    paddingLeft: 24,
     marginBottom: 32,
     // shadow for iOS
     shadowColor: '#000',
@@ -79,30 +80,30 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   name: {
-    fontSize: 18 * scale,
+    fontSize: 16 * scale,
     fontWeight: '500',
-    marginBottom: 16,
+    marginBottom: 8,
   },
   joined: {
-    fontSize: 14 * scale,
+    fontSize: 12 * scale,
     fontWeight: '400',
-    marginBottom: 20,
+    marginBottom: 5,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   circle: {
-    width: 28 * scale,
-    height: 28 * scale,
+    width: 2 * scale,
+    height: 2 * scale,
     borderRadius: 14 * scale,
     borderWidth: 2,
     borderColor: '#222',
-    backgroundColor: '#fff',
+    backgroundColor: '#000000',
     marginRight: 12,
   },
   optionText: {
-    fontSize: 16 * scale,
+    fontSize: 12 * scale,
     fontWeight: '400',
   },
   segmentContainer: {
@@ -111,8 +112,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: 999,
     overflow: 'hidden',
-    marginBottom: 8,
-    marginTop: 8,
+    marginBottom: 2,
+    marginTop: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.10,
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
   },
   segment: {
     flex: 1,
-    paddingVertical: 14 * scale,
+    paddingVertical: 6 * scale,
     alignItems: 'center',
     backgroundColor: '#cbe9e7',
   },
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
     height: '70%',
   },
   segmentText: {
-    fontSize: 18 * scale,
+    fontSize: 14 * scale,
     fontWeight: '400',
   },
   segmentTextActive: {
