@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 18,
+    fontSize: 12,
     fontWeight: '500',
     flex: 1,
     marginRight: 8,
@@ -107,16 +107,16 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 999,
     alignSelf: 'flex-start',
-    marginLeft: 8,
+    marginLeft: 2,
   },
   statusText: {
     color: '#fff',
     fontWeight: '500',
-    fontSize: 14,
+    fontSize: 10,
   },
   committeeText: {
     color: '#bdbdbd',
-    fontSize: 15,
+    fontSize: 9,
     marginTop: 8,
     marginBottom: 8,
     fontWeight: '500',
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     color: '#bdbdbd',
-    fontSize: 14,
+    fontSize: 9,
   },
 })
 
