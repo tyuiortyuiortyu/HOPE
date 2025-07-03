@@ -13,12 +13,18 @@ const TrackLayout = () => {
                 headerTitleStyle: { 
                     fontWeight: 'bold',
                 },
-                headerShadowVisible: true, // Menghilangkan bayangan di bawah header
+                headerShadowVisible: false, // Menghilangkan bayangan di bawah header
             }}>
             <Stack.Screen
                 name="index"
                 options={{
-                    title: "Jurnal Harapanku",
+                    headerShown: false, // Hide header since index has Sobat Baik header
+                }}
+            />
+            <Stack.Screen
+                name="(component)/MyDonationCardDetail"
+                options={{
+                    title: "Detail Donasi",
                     headerShown: true,
                     headerBackTitle: "Back",
                 }}

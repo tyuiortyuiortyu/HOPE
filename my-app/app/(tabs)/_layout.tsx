@@ -5,7 +5,7 @@ import { Dimensions, Platform } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
-import icons from '../../constants/icons'
+import images from '../../constants/images'
 
 const TabsLayout = () => {
   return (
@@ -30,9 +30,8 @@ const TabsLayout = () => {
           tabBarIcon: ({ color, focused }) => (
             <View className='flex items-center justify-center' >
               <Image
-                source={icons.home}
+                source={focused ? images.home_active : images.home_nonactive}
                 resizeMode="contain"
-                tintColor={color}
                 className={`w-${width > 400 ? '8' : '7'} h-${width > 400 ? '8' : '7'}`}
               />
               <Text
@@ -52,9 +51,8 @@ const TabsLayout = () => {
           tabBarIcon: ({ color, focused }) => (
             <View className='flex items-center justify-center' >
               <Image
-                source={icons.volunteer}
+                source={focused ? images.volunteer_active : images.volunteer_nonactive}
                 resizeMode="contain"
-                tintColor={color}
                 className={`w-${width > 400 ? '7' : '6'} h-${width > 400 ? '7' : '6'}`}
               />
               <Text
@@ -74,9 +72,8 @@ const TabsLayout = () => {
           tabBarIcon: ({ color, focused }) => (
             <View className='flex items-center justify-center' >
               <Image
-                source={icons.donate}
+                source={focused ? images.donate_active : images.donate_nonactive}
                 resizeMode="contain"
-                tintColor={color}
                 className={`w-${width > 400 ? '7' : '6'} h-${width > 400 ? '7' : '6'}`}
               />
               <Text
@@ -96,9 +93,8 @@ const TabsLayout = () => {
           tabBarIcon: ({ color, focused }) => (
             <View className='flex items-center justify-center' >
               <Image
-                source={icons.donor}
+                source={focused ? images.donor_active : images.donor_nonactive}
                 resizeMode="contain"
-                tintColor={color}
                 className={`w-${width > 400 ? '7' : '6'} h-${width > 400 ? '7' : '6'}`}
               />
               <Text
@@ -118,9 +114,8 @@ const TabsLayout = () => {
           tabBarIcon: ({ color, focused }) => (
             <View className='flex items-center justify-center' >
               <Image
-                source={icons.track}
+                source={focused ? images.track_active : images.track_nonactive}
                 resizeMode="contain"
-                tintColor={color}
                 className={`w-${width > 400 ? '7' : '6'} h-${width > 400 ? '7' : '6'}`}
               />
               <Text

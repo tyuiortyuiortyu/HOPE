@@ -388,7 +388,10 @@ const HomeScreen = () => {
         </View>
         
         <TouchableOpacity className="px-4 py-2 rounded-full" style={{ backgroundColor: '#82BFB7' }}>
-          <Text className="font-semibold text-sm text-white">🙏🏻 Aamiin</Text>
+          <View className="flex-row items-center">
+            <Image source={images.pray} className="w-4 h-4 mr-1" resizeMode="contain" />
+            <Text className="font-semibold text-sm text-white">Aamiin</Text>
+          </View>
         </TouchableOpacity>
       </View>
     </View>
@@ -400,15 +403,58 @@ const HomeScreen = () => {
     setCurrentSpesialIndex(index);
   };
 
+  // Updated volunteer recommendation data
+  const volunteerRecommendationData = [
+    {
+      id: '1',
+      title: 'Mengajar Anak-Anak di Panti Asuhan',
+      organization: 'Yayasan Kasih Sayang',
+      category: 'PENDIDIKAN',
+      description: 'Berbagi ilmu dengan mengajar anak-anak yatim',
+      location: 'Jakarta Selatan',
+      date: '15 Desember 2024',
+      volunteers: '12/20 volunteer',
+      backgroundColor: '#E8F5E8',
+      verified: true,
+      urgent: false,
+    },
+    {
+      id: '2',
+      title: 'Bakti Sosial Membersihkan Pantai',
+      organization: 'Komunitas Peduli Lingkungan',
+      category: 'LINGKUNGAN',
+      description: 'Gotong royong membersihkan sampah di pantai',
+      location: 'Pantai Ancol',
+      date: '20 Desember 2024',
+      volunteers: '45/50 volunteer',
+      backgroundColor: '#E0F2FE',
+      verified: true,
+      urgent: true,
+    },
+    {
+      id: '3',
+      title: 'Pendampingan Lansia di Panti Jompo',
+      organization: 'Relawan Peduli Sesama',
+      category: 'KESEHATAN',
+      description: 'Menemani dan merawat kakek nenek di panti',
+      location: 'Bogor',
+      date: '18 Desember 2024',
+      volunteers: '8/15 volunteer',
+      backgroundColor: '#FFF0F5',
+      verified: true,
+      urgent: false,
+    },
+  ];
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header with Search and Icons - Primary Color Background */}
+        {/* Standardized Header with Search and Icons */}
         <View className="py-6 pb-8" style={{ backgroundColor: '#82BFB7' }}>
           <View className="flex-row items-center justify-between px-6 mb-6">
             <View className="flex-row items-center">
               <View className="w-10 h-10 rounded-full bg-white/20 items-center justify-center mr-3">
-                <Ionicons name="person" size={20} color="white" />
+                <Image source={images.user} className="w-6 h-6" resizeMode="contain" />
               </View>
               <View>
                 <Text className="text-white text-sm">Selamat pagi,</Text>
@@ -421,12 +467,14 @@ const HomeScreen = () => {
                 className="w-10 h-10 rounded-full bg-white/20 items-center justify-center"
                 onPress={() => router.push('/home/inbox')}
               >
-                <Ionicons name="notifications-outline" size={20} color="white" />
+                <Image source={images.message} className="w-5 h-5" resizeMode="contain" />
               </TouchableOpacity>
               
-              <TouchableOpacity className="w-10 h-10 rounded-full bg-white/20 items-center justify-center"
-                onPress={() => router.push('home/profile/profile')}>
-                <Ionicons name="person-circle-outline" size={24} color="white" />
+              <TouchableOpacity 
+                className="w-10 h-10 rounded-full bg-white/20 items-center justify-center"
+                onPress={() => router.push('home/profile/profile')}
+              >
+                <Image source={images.user} className="w-6 h-6" resizeMode="contain" />
               </TouchableOpacity>
             </View>
           </View>
@@ -443,7 +491,7 @@ const HomeScreen = () => {
           </View>
         </View>
 
-        {/* Quick Actions */}
+        {/* Quick Actions - Navigation to Main Tabs */}
         <View className="px-6 -mt-6 mb-8">
           <View 
             className="bg-white rounded-2xl p-6"
@@ -457,44 +505,56 @@ const HomeScreen = () => {
           >
             <Text className="text-lg font-bold text-gray-900 mb-4">Aksi Cepat</Text>
             <View className="flex-row justify-between">
-              <TouchableOpacity className="items-center flex-1">
-                <View className="w-12 h-12 rounded-full items-center justify-center mb-2" style={{ backgroundColor: "#F2A2BD" }}>
-                  <Ionicons name="heart" size={20} color="#FFFFFF" />
-                </View>
-                <Text className="text-xs text-gray-600 text-center">Donasi</Text>
-              </TouchableOpacity>
-              <TouchableOpacity className="items-center flex-1">
-                <View className="w-12 h-12 rounded-full items-center justify-center mb-2" style={{ backgroundColor: "#FED3DD" }}>
-                  <Ionicons name="leaf" size={20} color="#FFFFFF" />
-                </View>
-                <Text className="text-xs text-gray-600 text-center">Zakat</Text>
-              </TouchableOpacity>
-              <TouchableOpacity className="items-center flex-1">
+              <TouchableOpacity 
+                className="items-center flex-1"
+                onPress={() => router.push('/(tabs)/volunteer')}
+              >
                 <View className="w-12 h-12 rounded-full items-center justify-center mb-2" style={{ backgroundColor: "#C6E6E3" }}>
-                  <Ionicons name="people" size={20} color="#FFFFFF" />
+                  <Image source={images.volunteer_nonactive} className="w-6 h-6" resizeMode="contain" />
                 </View>
-                <Text className="text-xs text-gray-600 text-center">Volunteer</Text>
+                <Text className="text-xs text-gray-600 text-center font-medium">Volunteer</Text>
               </TouchableOpacity>
-              <TouchableOpacity className="items-center flex-1">
-                <View className="w-12 h-12 rounded-full items-center justify-center mb-2" style={{ backgroundColor: "#82BFB7" }}>
-                  <Ionicons name="water" size={20} color="#FFFFFF" />
+              <TouchableOpacity 
+                className="items-center flex-1"
+                onPress={() => router.push('/(tabs)/donate')}
+              >
+                <View className="w-12 h-12 rounded-full items-center justify-center mb-2" style={{ backgroundColor: "#FED3DD" }}>
+                  <Image source={images.donate_nonactive} className="w-6 h-6" resizeMode="contain" />
                 </View>
-                <Text className="text-xs text-gray-600 text-center">Donor</Text>
+                <Text className="text-xs text-gray-600 text-center font-medium">Donate</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                className="items-center flex-1"
+                onPress={() => router.push('/(tabs)/donor')}
+              >
+                <View className="w-12 h-12 rounded-full items-center justify-center mb-2" style={{ backgroundColor: "#C6E6E3" }}>
+                  <Image source={images.donor_nonactive} className="w-6 h-6" resizeMode="contain" />
+                </View>
+                <Text className="text-xs text-gray-600 text-center font-medium">Donor</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                className="items-center flex-1"
+                onPress={() => router.push('/(tabs)/track')}
+              >
+                <View className="w-12 h-12 rounded-full items-center justify-center mb-2" style={{ backgroundColor: "#FED3DD" }}>
+                  <Image source={images.track_nonactive} className="w-6 h-6" resizeMode="contain" />
+                </View>
+                <Text className="text-xs text-gray-600 text-center font-medium">Track</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
 
-        {/* Campaign Mendesak */}
+        {/* Volunteer Recommendations - Moved here */}
         <View className="mb-8">
           <View className="flex-row items-center justify-between px-6 mb-4">
-            <Text className="text-xl font-bold text-gray-900">Campaign Mendesak</Text>
-            <TouchableOpacity>
+            <Text className="text-xl font-bold text-gray-900">Rekomendasi Volunteer</Text>
+            <TouchableOpacity onPress={() => router.push('/(tabs)/volunteer')}>
               <Text style={{ color: "#82BFB7" }} className="font-medium">Lihat semua</Text>
             </TouchableOpacity>
           </View>
           <FlatList
-            data={jmatBerkahData}
+            data={volunteerRecommendationData}
             renderItem={({ item }) => (
               <View 
                 className="w-80 mr-4 bg-white rounded-2xl overflow-hidden"
@@ -513,6 +573,11 @@ const HomeScreen = () => {
                   <View className="bg-white/90 rounded-lg px-3 py-1 self-start">
                     <Text className="text-xs font-semibold text-gray-800">{item.category}</Text>
                   </View>
+                  {item.urgent && (
+                    <View className="bg-red-500 rounded-lg px-2 py-1 self-end mt-2">
+                      <Text className="text-xs font-bold text-white">MENDESAK</Text>
+                    </View>
+                  )}
                 </View>
                 <View className="p-4">
                   <View className="flex-row items-center mb-2">
@@ -521,23 +586,41 @@ const HomeScreen = () => {
                       <Ionicons name="shield-checkmark" size={16} color="#82BFB7" />
                     )}
                   </View>
-                  <Text className="text-base font-bold text-gray-900 mb-3" numberOfLines={2}>
+                  <Text className="text-base font-bold text-gray-900 mb-2" numberOfLines={2}>
                     {item.title}
                   </Text>
+                  <Text className="text-sm text-gray-600 mb-3" numberOfLines={2}>
+                    {item.description}
+                  </Text>
                   <View className="mb-3">
-                    <View className="flex-row items-center justify-between mb-2">
-                      <Text className="text-sm text-gray-600">Terkumpul</Text>
-                      <Text className="text-sm font-semibold text-gray-900">{item.collected}</Text>
+                    <View className="flex-row items-center justify-between mb-1">
+                      <View className="flex-row items-center">
+                        <Image source={images.location} className="w-3 h-3 mr-1" resizeMode="contain" />
+                        <Text className="text-xs text-gray-500">{item.location}</Text>
+                      </View>
+                      <View className="flex-row items-center">
+                        <Image source={images.date} className="w-3 h-3 mr-1" resizeMode="contain" />
+                        <Text className="text-xs text-gray-500">{item.date}</Text>
+                      </View>
                     </View>
-                    <View className="w-full h-2 bg-gray-200 rounded-full">
-                      <View 
-                        className="h-full rounded-full" 
-                        style={{ width: `${item.progress * 100}%`, backgroundColor: "#82BFB7" }}
-                      />
+                    <View className="flex-row items-center justify-between">
+                      <View className="flex-row items-center">
+                        <Image source={images.user} className="w-3 h-3 mr-1" resizeMode="contain" />
+                        <Text className="text-sm font-semibold text-gray-700">{item.volunteers}</Text>
+                      </View>
+                      <View className="w-20 h-2 bg-gray-200 rounded-full">
+                        <View 
+                          className="h-full rounded-full" 
+                          style={{ 
+                            width: `${(parseInt(item.volunteers.split('/')[0]) / parseInt(item.volunteers.split('/')[1])) * 100}%`, 
+                            backgroundColor: "#82BFB7" 
+                          }}
+                        />
+                      </View>
                     </View>
                   </View>
                   <TouchableOpacity className="rounded-xl py-3" style={{ backgroundColor: "#82BFB7" }}>
-                    <Text className="text-white font-semibold text-center">Donasi Sekarang</Text>
+                    <Text className="text-white font-semibold text-center">Daftar Volunteer</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -552,7 +635,7 @@ const HomeScreen = () => {
         {/* Campaign Mendesak Lainnya */}
         <View className="mb-8">
           <View className="flex-row items-center justify-between px-6 mb-4">
-            <Text className="text-xl font-bold text-gray-900">Campaign Mendesak Lainnya</Text>
+            <Text className="text-xl font-bold text-gray-900">Program Donasi Berkelanjutan</Text>
             <TouchableOpacity>
               <Text style={{ color: "#82BFB7" }} className="font-medium">Lihat semua</Text>
             </TouchableOpacity>
@@ -615,7 +698,7 @@ const HomeScreen = () => {
 
         {/* Spesial Buat Kamu Section */}
         <View className="mb-6">
-          <Text className="text-xl font-bold text-gray-800 mb-4 px-5">Spesial Buat Kamu</Text>
+          <Text className="text-xl font-bold text-gray-800 mb-4 px-5">Rekomendasi Donor</Text>
           <FlatList
             data={spesialData}
             renderItem={({ item }) => <SpesialCard item={item} />}
@@ -648,7 +731,7 @@ const HomeScreen = () => {
         {/* Doa-doa #OrangBaik Section */}
         <View className="mb-8">
           <View className="flex-row items-center justify-between px-6 mb-4">
-            <Text className="text-xl font-bold text-gray-900">Doa-doa #OrangBaik</Text>
+            <Text className="text-xl font-bold text-gray-900">Doa-doa #GiveWithHope</Text>
             <TouchableOpacity onPress={() => router.push('/home/prayers')}>
               <Text style={{ color: "#82BFB7" }} className="font-medium">Lihat semua</Text>
             </TouchableOpacity>

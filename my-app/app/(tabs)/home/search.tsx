@@ -6,9 +6,12 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
+  Image,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import images from '../../../constants/images';
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState('');
@@ -40,44 +43,52 @@ const SearchScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {/* Standardized Header */}
+      <View className="bg-white">
+        <View style={styles.headerTop}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Image 
+              source={images.back} 
+              style={styles.backIcon} 
+              resizeMode="contain" 
+            />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Pencarian</Text>
+        </View>
+      </View>
+
       <ScrollView className="flex-1">
-        {/* Header with Back Button and Search */}
         <View className="px-6 py-4">
-          <View className="flex-row items-center mb-6">
-            <TouchableOpacity 
-              className="mr-4"
-              onPress={() => router.back()}
-            >
-              <Ionicons name="arrow-back" size={24} color="#000" />
-            </TouchableOpacity>
-            
-            <View 
-              className="flex-1 flex-row items-center bg-white rounded-2xl px-4 py-1"
-              style={{ 
-                shadowColor: '#000', 
-                shadowOffset: { width: 0, height: 2 }, 
-                shadowOpacity: 0.1, 
-                shadowRadius: 4, 
-                elevation: 3 
-              }}
-            >
-              <Ionicons name="search" size={20} color="#9CA3AF" />
-              <TextInput
-                className="flex-1 ml-3 text-base text-gray-900"
-                placeholder="Cari campaign, zakat, atau donasi..."
-                placeholderTextColor="#9CA3AF"
-                value={searchText}
-                onChangeText={setSearchText}
-                autoFocus
-                onSubmitEditing={handleSearch}
-                returnKeyType="search"
-              />
-              {searchText.length > 0 && (
-                <TouchableOpacity onPress={() => setSearchText('')}>
-                  <Ionicons name="close-circle" size={20} color="#9CA3AF" />
-                </TouchableOpacity>
-              )}
-            </View>
+          {/* Search Input */}
+          <View 
+            className="flex-row items-center bg-white rounded-2xl px-4 py-1 mb-6"
+            style={{ 
+              shadowColor: '#000', 
+              shadowOffset: { width: 0, height: 2 }, 
+              shadowOpacity: 0.1, 
+              shadowRadius: 4, 
+              elevation: 3 
+            }}
+          >
+            <Ionicons name="search" size={20} color="#9CA3AF" />
+            <TextInput
+              className="flex-1 ml-3 text-base text-gray-900"
+              placeholder="Cari campaign, zakat, atau donasi..."
+              placeholderTextColor="#9CA3AF"
+              value={searchText}
+              onChangeText={setSearchText}
+              autoFocus
+              onSubmitEditing={handleSearch}
+              returnKeyType="search"
+            />
+            {searchText.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchText('')}>
+                <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Pencarian Pilihan Section */}
@@ -189,5 +200,29 @@ const SearchScreen = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 12,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#374151',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F2937',
+  },
+});
 
 export default SearchScreen;

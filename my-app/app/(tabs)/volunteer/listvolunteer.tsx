@@ -2,6 +2,7 @@ import { View, Text, Image, ScrollView, TouchableOpacity, StatusBar, StyleSheet,
 import React from 'react';
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import images from '../../../constants/images'; // Pastikan path dan nama gambar sudah benar
 
 // ==========================================================
@@ -16,7 +17,7 @@ const dummyActivities = [
     date: '12 Mei 2025',
     image: images.volunteer1,
     organizer: 'Volunteer by Hope',
-    organizerLogo: images.Logo,
+    organizerLogo: images.Logo1, // Fixed logo reference
     description: 'Kegiatan "Sebersi" atau "Seminggu Bersih-Bersih" adalah inisiatif kami untuk membersihkan area publik yang sering terabaikan. Bergabunglah bersama kami untuk membuat lingkungan lebih sehat.',
     benefit: 'Selain mendapatkan pengalaman berharga, Anda akan menerima sertifikat partisipasi, konsumsi selama acara, dan kesempatan untuk memperluas jaringan dengan sesama relawan.',
     terms: [ 'Berusia minimal 17 tahun', 'Sehat jasmani dan rohani', 'Bersedia mengikuti arahan koordinator', 'Membawa botol minum pribadi' ]
@@ -28,7 +29,7 @@ const dummyActivities = [
     date: '10 Jan 2025',
     image: images.volunteer2,
     organizer: 'Berbagi Berkah Community',
-    organizerLogo: images.Logo,
+    organizerLogo: images.Logo1, // Fixed logo reference
     description: 'Setiap Jumat, kami berkeliling untuk membagikan makanan kepada mereka yang membutuhkan. Kami membutuhkan bantuan Anda untuk proses memasak, pengemasan, dan distribusi.',
     benefit: 'Merasakan langsung kebahagiaan berbagi, makan siang gratis, dan menjadi bagian dari komunitas yang peduli.',
     terms: [ 'Ikhlas dan tulus membantu', 'Menjaga kebersihan selama proses', 'Dapat bekerja dalam tim' ]
@@ -92,15 +93,31 @@ const VolunteerScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      
+      {/* Header - Updated to match detail page */}
+      <View className="bg-white px-4 py-3">
+        <View style={styles.headerTop}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Image 
+              source={images.back} 
+              style={styles.backIcon} 
+              resizeMode="contain" 
+            />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Volunteer Hope</Text>
+        </View>
+      </View>
       
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="relative pb-20">
-
           {/* Gambar Header */}
           <Image
             source={images.volunteer1}
-            className="w-full h-56 rounded" 
+            className="w-full h-56" 
             resizeMode="cover"
           />
 
@@ -170,15 +187,6 @@ const VolunteerScreen = () => {
             </View>
           </View>
 
-          {/* Tombol Kembali Mengambang */}
-          <TouchableOpacity
-            className="absolute top-5 left-5 p-2 rounded-full z-40"
-            // style={styles.shadow}
-            onPress={() => router.back()}
-          >
-            <Feather name="arrow-left" size={24} color="black" />
-          </TouchableOpacity>
-
         </View>
       </ScrollView>
     </View>
@@ -189,6 +197,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF', 
+  },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 12,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#374151',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F2937',
   },
   shadow: {
     shadowColor: "#000",

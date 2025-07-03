@@ -67,7 +67,7 @@ const MyAction = () => {
         <TouchableOpacity
           key={item.title + idx}
           activeOpacity={0.85}
-          onPress={() => router.push({ pathname: '/(tabs)/track/(component)/MyActionCardDetail', params: { ...item } })}
+          onPress={() => router.push({ pathname: '/track/(component)/MyActionCardDetail', params: { ...item } })}
         >
           <MyActionCard
             image={item.image}
