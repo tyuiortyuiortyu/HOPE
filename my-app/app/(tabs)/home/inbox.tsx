@@ -7,9 +7,11 @@ import {
   ScrollView,
   Image,
   FlatList,
+  StyleSheet
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import images from '../../../constants/images';
 
 const InboxScreen = () => {
   const [activeTab, setActiveTab] = useState('Kabar');
@@ -97,7 +99,6 @@ const InboxScreen = () => {
       className={`mx-4 mb-4 rounded-2xl overflow-hidden ${
         item.isRead ? 'bg-white' : 'bg-blue-50'
       }`}
-      style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3 }}
       onPress={() => router.push('conversation')}
       activeOpacity={0.8}
     >
@@ -163,7 +164,6 @@ const InboxScreen = () => {
   const MessageCard = ({ item }) => (
     <TouchableOpacity 
       className="mx-4 mb-3 p-4 bg-white rounded-2xl"
-      style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 3, elevation: 2 }}
       onPress={() => router.push('conversation')}
       activeOpacity={0.8}
     >
@@ -227,17 +227,20 @@ const InboxScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      {/* Header */}
+      {/* Standardized Header Navigation */}
       <View className="bg-white">
-        <View className="flex-row items-center px-6 py-4">
+        <View style={styles.headerTop}>
           <TouchableOpacity 
-            className="mr-4"
+            style={styles.backButton}
             onPress={() => router.back()}
           >
-            <Ionicons name="arrow-back" size={24} color="#1F2937" />
+            <Image 
+              source={images.back} 
+              style={styles.backIcon} 
+              resizeMode="contain" 
+            />
           </TouchableOpacity>
-          <Text className="text-xl font-bold text-gray-900">Inbox</Text>
-          <View className="w-6" />
+          <Text style={styles.headerTitle}>Inbox</Text>
         </View>
 
         {/* Tabs */}
@@ -299,5 +302,29 @@ const InboxScreen = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 12,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#374151',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F2937',
+  },
+});
 
 export default InboxScreen;

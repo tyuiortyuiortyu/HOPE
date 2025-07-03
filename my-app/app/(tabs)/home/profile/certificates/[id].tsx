@@ -7,7 +7,6 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import icons from '../../../../../constants/icons';
 import images from '../../../../../constants/images';
 
-// Data yang sama seperti di halaman list. Dalam aplikasi nyata, Anda akan mengambil data ini dari state management (Redux, Zustand) atau melakukan fetch ulang berdasarkan ID.
 const certificateData = [
   {
     id: '1',
@@ -20,56 +19,205 @@ const certificateData = [
   { id: '3', title: 'Animal Shelter Donation Appreciation', date: '12 February 2024', image: images.sertifikatAnimal, description: 'Sertifikat ini diberikan sebagai tanda terima kasih atas donasi yang murah hati untuk mendukung kesejahteraan dan perawatan hewan-hewan di penampungan kami.' }
 ];
 
-const styles = StyleSheet.create({
-  headerIcon: { width: 20, height: 20, tintColor: '#4A4A4A' },
-  cardImage: {
-    width: '100%',
-    height: 220, // Lebih tinggi untuk detail
-    resizeMode: 'contain', // Contain agar seluruh sertifikat terlihat
-    borderRadius: 12,
-  },
-  downloadIcon: { width: 24, height: 24 },
-});
-
 const CertificateDetailScreen = () => {
   const router = useRouter();
-  const { id } = useLocalSearchParams(); // Mengambil 'id' dari URL
+  const { id } = useLocalSearchParams();
   const certificate = certificateData.find(cert => cert.id === id);
 
   if (!certificate) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center">
-        <Text>Sertifikat tidak ditemukan.</Text>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyText}>Sertifikat tidak ditemukan.</Text>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.backButtonText}>Kembali</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
-      <View className="bg-[#A2D5C6] p-4 h-[60px] flex-row items-center shadow-md">
-        <TouchableOpacity onPress={() => router.back()} className="p-1">
-          <Image source={icons.back} style={styles.headerIcon} />
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.headerBackButton}
+          onPress={() => router.back()}
+        >
+          <Image 
+            source={images.back} 
+            style={styles.headerBackIcon} 
+            resizeMode="contain" 
+          />
         </TouchableOpacity>
-        <Text className="text-lg font-bold text-gray-800 ml-4">Detail Sertifikat</Text>
+        <Text style={styles.headerTitle}>Detail Sertifikat</Text>
+        <TouchableOpacity style={styles.shareButton}>
+          <Image source={icons.download} style={styles.shareIcon} />
+        </TouchableOpacity>
       </View>
 
-      <ScrollView className="mt-5">
-        <View className="bg-white rounded-xl shadow-lg mx-4 p-4">
-          <Image source={certificate.image} style={styles.cardImage} />
-          <View className="flex-row justify-between items-start mt-4">
-            <View className="flex-1 mr-4">
-              <Text className="text-lg font-bold text-gray-800">{certificate.title}</Text>
-              <Text className="text-sm text-gray-500 mt-1">{certificate.date}</Text>
-            </View>
-            <TouchableOpacity>
-              <Image source={icons.download} style={styles.downloadIcon} />
+      <ScrollView style={styles.content}>
+        <View style={styles.certificateCard}>
+          <Image source={certificate.image} style={styles.certificateImage} />
+          
+          <View style={styles.certificateInfo}>
+            <Text style={styles.certificateTitle}>{certificate.title}</Text>
+            <Text style={styles.certificateDate}>{certificate.date}</Text>
+            <Text style={styles.certificateDescription}>{certificate.description}</Text>
+          </View>
+
+          <View style={styles.actionButtons}>
+            <TouchableOpacity style={styles.downloadButton}>
+              <Image source={icons.download} style={styles.actionIcon} />
+              <Text style={styles.actionText}>Download</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.shareButtonSecondary}>
+              <Image source={icons.download} style={styles.actionIcon} />
+              <Text style={styles.actionText}>Share</Text>
             </TouchableOpacity>
           </View>
-          <Text className="text-base text-gray-700 mt-4 leading-6">{certificate.description}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F8F9FA',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#82BFB7',
+    paddingHorizontal: 16,
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+  headerBackButton: {
+    padding: 8,
+  },
+  headerBackIcon: {
+    width: 24,
+    height: 24,
+    tintColor: 'white',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  shareButton: {
+    padding: 8,
+  },
+  shareIcon: {
+    width: 24,
+    height: 24,
+    tintColor: 'white',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+  certificateCard: {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 5,
+  },
+  certificateImage: {
+    width: '100%',
+    height: 250,
+    resizeMode: 'contain',
+    borderRadius: 12,
+    marginBottom: 20,
+  },
+  certificateInfo: {
+    marginBottom: 30,
+  },
+  certificateTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#374151',
+    marginBottom: 8,
+  },
+  certificateDate: {
+    fontSize: 16,
+    color: '#6B7280',
+    marginBottom: 15,
+  },
+  certificateDescription: {
+    fontSize: 16,
+    color: '#374151',
+    lineHeight: 24,
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  downloadButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#82BFB7',
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  shareButtonSecondary: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F3F4F6',
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginLeft: 10,
+  },
+  actionIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+  },
+  actionText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: 'white',
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+  },
+  emptyText: {
+    fontSize: 18,
+    color: '#6B7280',
+    marginBottom: 20,
+  },
+  backButton: {
+    backgroundColor: '#82BFB7',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 10,
+  },
+  backButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});
 
 export default CertificateDetailScreen;

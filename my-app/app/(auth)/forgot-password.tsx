@@ -4,8 +4,11 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Alert,
   SafeAreaView,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -14,84 +17,140 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const router = useRouter();
 
-  const handleSend = () => {
+  const handleSendCode = () => {
     if (!email) {
       Alert.alert("Error", "Mohon masukkan alamat email");
       return;
     }
-    if (!email.includes("@")) {
-      Alert.alert("Error", "Mohon masukkan alamat email yang valid");
-      return;
-    }
     Alert.alert("Berhasil", "Link reset password telah dikirim ke email Anda!");
-    router.back();
+    router.push({
+      pathname: "verify-code",
+      params: { email, type: "reset" },
+    });
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      {/* Header */}
-      <View className="flex-row items-center justify-between px-6 py-4">
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#1F2937" />
-        </TouchableOpacity>
-        <Text className="text-lg font-semibold text-gray-900">Lupa Password</Text>
-        <View className="w-6" />
-      </View>
-
-      <View className="flex-1 px-6">
-        {/* Icon */}
-        <View className="items-center mt-8 mb-8">
-          <View className="w-20 h-20 rounded-full items-center justify-center mb-6" style={{ backgroundColor: "#C6E6E3" }}>
-            <Ionicons name="mail-outline" size={32} color="#82BFB7" />
-          </View>
-          
-          <Text className="text-2xl font-bold text-gray-900 mb-4 text-center">
-            Lupa Password?
-          </Text>
-          <Text className="text-gray-600 text-center text-base leading-6">
-            Masukkan email yang terdaftar dan kami akan mengirimkan link untuk reset password Anda
-          </Text>
-        </View>
-
-        {/* Email Input */}
-        <View className="mb-8">
-          <Text className="text-sm font-medium text-gray-700 mb-2">
-            Email
-          </Text>
-          <TextInput
-            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-base focus:border-blue-500"
-            placeholder="Masukkan alamat email"
-            placeholderTextColor="#9CA3AF"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
-          />
-        </View>
-
-        {/* Send Button */}
+    <View style={styles.container}>
+      <View style={styles.topSection}>
         <TouchableOpacity
-          className="w-full rounded-xl py-4"
-          style={{ backgroundColor: "#82BFB7" }}
-          onPress={handleSend}
-        >
-          <Text className="text-white text-base font-semibold text-center">
-            Kirim Link Reset
-          </Text>
-        </TouchableOpacity>
-
-        {/* Back to Login */}
-        <TouchableOpacity 
-          className="mt-6"
+          style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Text className="text-center text-gray-600">
-            Kembali ke halaman masuk
-          </Text>
+          <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+
+      <View style={styles.content}>
+        <Text style={styles.title}>Forgot Password</Text>
+
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.subtitle}>Remember your password? </Text>
+          <TouchableOpacity onPress={() => router.push("login")}>
+            <Text style={styles.linkText}>sign in</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.form}>
+          {/* Email Input */}
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="#9CA3AF"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+          </View>
+
+          {/* Send Code Button */}
+          <TouchableOpacity
+            style={styles.sendButton}
+            onPress={handleSendCode}
+          >
+            <Text style={styles.sendButtonText}>Send Code</Text>
+            <Ionicons name="arrow-forward" size={20} color="white" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FED3DD",
+  },
+  topSection: {
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  content: {
+    flex: 1,
+    backgroundColor: "white",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 24,
+    paddingTop: 40,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "#000",
+    marginBottom: 8,
+  },
+  subtitleContainer: {
+    flexDirection: "row",
+    marginBottom: 40,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "#666",
+  },
+  linkText: {
+    fontSize: 14,
+    color: "#82BFB7",
+    fontWeight: "500",
+  },
+  form: {
+    flex: 1,
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    height: 50,
+    fontSize: 16,
+    color: "#000",
+  },
+  sendButton: {
+    backgroundColor: "#82BFB7",
+    borderRadius: 25,
+    height: 50,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  sendButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
+    marginRight: 8,
+  },
+});
 
 export default ForgotPassword;

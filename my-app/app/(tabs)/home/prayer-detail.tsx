@@ -6,9 +6,11 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import images from '../../../constants/images';
 
 const PrayerDetailScreen = () => {
   const router = useRouter();
@@ -31,11 +33,18 @@ const PrayerDetailScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Header */}
-      <View className="flex-row items-center justify-between px-5 py-4 border-b border-gray-100">
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#000" />
+      <View style={styles.headerTop}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Image 
+            source={images.back} 
+            style={styles.backIcon} 
+            resizeMode="contain" 
+          />
         </TouchableOpacity>
-        <Text className="text-lg font-bold text-gray-800">Doa-doa #OrangBaik</Text>
+        <Text style={styles.headerTitle}>Doa-doa #OrangBaik</Text>
         <TouchableOpacity>
           <Ionicons name="options-outline" size={24} color="#9CA3AF" />
         </TouchableOpacity>
@@ -141,5 +150,31 @@ const PrayerDetailScreen = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: 50,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+  backButton: {
+    padding: 8,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#374151',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#1F2937',
+  },
+});
 
 export default PrayerDetailScreen;

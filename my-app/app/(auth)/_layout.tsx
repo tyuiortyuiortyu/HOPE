@@ -9,19 +9,12 @@ const AuthLayout = () => {
         animation: "fade_from_bottom",
       }}
     >
-      <Stack.Screen
-        name="login"
-        options={{ title: "Login", headerShown: true }}
-      />
-      <Stack.Screen
-        name="register"
-        options={{ title: "Register", headerShown: true }}
-      />
-    {/* <Stack>
-      <Stack.Screen name="welcome" options={{ headerShown: false }} />
-      <Stack.Screen name="login" options={{ headerShown: false }} />
-      <Stack.Screen name="register" options={{ headerShown: false }} />
-      <Stack.Screen name="forgot-password" options={{ headerShown: false }} /> */}
+      <Stack.Screen name="welcome" />
+      <Stack.Screen name="login" />
+      <Stack.Screen name="register" />
+      <Stack.Screen name="forgot-password" />
+      <Stack.Screen name="verify-code" />
+      <Stack.Screen name="reset-password" />
     </Stack>
   );
 };

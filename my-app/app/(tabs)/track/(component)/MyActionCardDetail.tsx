@@ -1,12 +1,24 @@
 import React from 'react'
-import { View, Text, StyleSheet, ScrollView, Dimensions } from 'react-native'
-import { useLocalSearchParams } from 'expo-router'
+import { View, Text, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Image } from 'react-native'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import MyActionCard from './MyActionCard'
 
 const { width } = Dimensions.get('window')
 const CARD_WIDTH = width - 32
 
-const MyActionCardDetail = () => {
+interface ActionParams {
+  image: string
+  title: string
+  committee: string
+  datecreated: string
+  actiondate: string
+  location: string
+  activity: string
+  status: string
+}
+
+const MyActionCardDetail: React.FC = () => {
+  const router = useRouter()
   const params = useLocalSearchParams()
   const {
     image,
@@ -17,31 +29,49 @@ const MyActionCardDetail = () => {
     location,
     activity,
     status,
-  }: any = params
+  } = params as ActionParams
 
-  const statusLabel = (status: string) => {
-    if (status === 'selesai') return 'Selesai'
-    if (status === 'berlangsung') return 'Berlangsung'
-    if (status === 'menunggu') return 'Menunggu'
-    if (status === 'dibatalkan') return 'Dibatalkan'
-    return status
+  const statusLabel = (status: string): string => {
+    switch (status) {
+      case 'selesai':
+        return 'Selesai'
+      case 'berlangsung':
+        return 'Berlangsung'
+      case 'menunggu':
+        return 'Menunggu'
+      case 'dibatalkan':
+        return 'Dibatalkan'
+      default:
+        return status
+    }
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <ScrollView contentContainerStyle={{ padding: 0 }}>
-        <View style={{ alignItems: 'center', marginTop: 32, marginBottom: 16 }}>
-          <Text style={styles.headerTitle}>Terima Kasih!</Text>
-          <Text style={styles.subtitle}>Pendaftaran Aksimu telah diterima!</Text>
+    <View style={styles.container}>
+      {/* Header */}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Success Message */}
+        <View style={styles.successSection}>
+          <View style={styles.successIcon}>
+            <Image 
+              source={require('../../../../assets/images/donate/done.png')} 
+              style={styles.successIconImage}
+            />
+          </View>
+          <Text style={styles.successTitle}>Terima Kasih!</Text>
+          <Text style={styles.successSubtitle}>Pendaftaran Aksimu telah diterima!</Text>
         </View>
+
+        {/* Info Card */}
         <View style={styles.infoCard}>
+          <Text style={styles.infoCardTitle}>Informasi Aksi</Text>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Tanggal Aksi</Text>
-            <Text style={[styles.infoValue, styles.bold]}>{actiondate || '-'}</Text>
+            <Text style={styles.infoValue}>{actiondate || '-'}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Lokasi Aksi</Text>
-            <Text style={[styles.infoValue, styles.bold]}>{location || '-'}</Text>
+            <Text style={styles.infoValue}>{location || '-'}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Kegiatan</Text>
@@ -49,11 +79,15 @@ const MyActionCardDetail = () => {
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.infoLabel}>Status</Text>
-            <Text style={styles.infoValue}>{statusLabel(status)}</Text>
+            <View style={styles.statusBadge}>
+              <Text style={styles.statusBadgeText}>{statusLabel(status)}</Text>
+            </View>
           </View>
         </View>
-        <View style={{ alignItems: 'center', marginTop: 8 }}>
-          <View style={styles.cardPreview}>
+
+        {/* Action Card Preview */}
+        <View style={styles.cardContainer}>
+          <Text style={styles.sectionTitle}>Program Aksi yang Diikuti</Text>
             <MyActionCard
               image={image}
               title={title}
@@ -64,7 +98,6 @@ const MyActionCardDetail = () => {
               activity={activity}
               status={status}
             />
-          </View>
         </View>
       </ScrollView>
     </View>
@@ -72,51 +105,147 @@ const MyActionCardDetail = () => {
 }
 
 const styles = StyleSheet.create({
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#222',
-    marginBottom: 8,
-    textAlign: 'center',
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
   },
-  subtitle: {
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 50,
+    paddingBottom: 16,
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e5e5',
+  },
+  backBtn: {
+    padding: 8,
+    width: 40,
+    alignItems: 'center',
+  },
+  backBtnText: {
+    fontSize: 24,
+    color: '#82c3be',
+    fontWeight: 'bold',
+  },
+  headerTitle: {
     fontSize: 18,
-    color: '#222',
-    marginBottom: 24,
+    fontWeight: '600',
+    color: '#1a1a1a',
+  },
+  scrollContainer: {
+    paddingBottom: 32,
+  },
+  successSection: {
+    alignItems: 'center',
+    paddingVertical: 32,
+    paddingHorizontal: 16,
+  },
+  successIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  successIconImage: {
+    width: 40,
+    height: 40,
+  },
+  successTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#1a1a1a',
+    marginBottom: 8,
+  },
+  successSubtitle: {
+    fontSize: 16,
+    color: '#666',
     textAlign: 'center',
+    lineHeight: 24,
   },
   infoCard: {
-    borderWidth: 2,
-    borderColor: '#bdbdbd',
-    borderRadius: 24,
-    marginHorizontal: 16,
-    padding: 24,
     backgroundColor: '#fff',
-    marginBottom: 24,
+    borderRadius: 16,
+    margin: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  infoCardTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1a1a1a',
+    marginBottom: 16,
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 18,
+    alignItems: 'center',
+    marginBottom: 12,
   },
   infoLabel: {
-    fontSize: 17,
-    color: '#222',
+    fontSize: 16,
+    color: '#666',
     fontWeight: '400',
-    flex: 1.2,
   },
   infoValue: {
-    fontSize: 17,
-    color: '#222',
-    fontWeight: '400',
-    flex: 1.5,
-    textAlign: 'right',
+    fontSize: 16,
+    color: '#1a1a1a',
+    fontWeight: '500',
   },
-  bold: {
-    fontWeight: 'bold',
+  statusBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
+    backgroundColor: '#dcfce7',
+  },
+  statusBadgeText: {
+    color: '#16a34a',
+    fontWeight: '500',
+    fontSize: 14,
+  },
+  cardContainer: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1a1a1a',
+    marginBottom: 12,
   },
   cardPreview: {
-    width: CARD_WIDTH,
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+    overflow: 'hidden',
+  },
+  actionContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+  },
+  actionBtn: {
+    backgroundColor: '#82c3be',
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  actionBtnText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 })
 

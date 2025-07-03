@@ -15,8 +15,41 @@ import volunteer1 from "../assets/images/volunteer1.png";
 import volunteer2 from "../assets/images/volunteer2.png";
 import volunteer3 from "../assets/images/volunteer3.png";
 import Logo1 from "../assets/images/Logo1.png";
-// import logo from "../assets/images/logo.png";
-export default {
+
+// Navbar images - Active states
+import home_active from "../assets/images/navbar/home_active.png";
+import volunteer_active from "../assets/images/navbar/volunteer_active.png";
+import donate_active from "../assets/images/navbar/donate_active.png";
+import donor_active from "../assets/images/navbar/donor_active.png";
+import track_active from "../assets/images/navbar/track_active.png";
+
+// Navbar images - Inactive states
+import home_nonactive from "../assets/images/navbar/home_nonactive.png";
+import volunteer_nonactive from "../assets/images/navbar/volunteer_nonactive.png";
+import donate_nonactive from "../assets/images/navbar/donate_nonactive.png";
+import donor_nonactive from "../assets/images/navbar/donor_nonactive.png";
+import track_nonactive from "../assets/images/navbar/track_nonactive.png";
+
+// Prayer, Message, and User images
+import pray from "../assets/images/doa/pray.png";
+import message from "../assets/images/message/message.png";
+import user from "../assets/images/user.png";
+import back from "../assets/images/back.png";
+import filter from "../assets/images/filter.png";
+
+import three_dots from "../assets/images/three_dots.png";
+import share from"../assets/images/share.png";
+import close from"../assets/images/close.png";
+import search from"../assets/images/search.png";
+import ceklis from"../assets/images/ceklis.png";
+import rubish from"../assets/images/rubish.png";
+
+import location from "../assets/images/volunteer/location.png";
+import date from "../assets/images/volunteer/date.png";
+
+import done from "../assets/images/donate/done.png";
+
+export default { 
     logo,
     apple,
     google,
@@ -39,4 +72,37 @@ export default {
     sertifikatHealth: require('../assets/images/sertifikat_health.png'),
     sertifikatAnimal: require('../assets/images/sertifikat_animal.png'),
     aboutUs: require('../assets/images/about_us_image.png'),
+
+    // Navbar images - Active states
+    home_active,
+    volunteer_active,
+    donate_active,
+    donor_active,
+    track_active,
+
+    // Navbar images - Inactive states
+    home_nonactive,
+    volunteer_nonactive,
+    donate_nonactive,
+    donor_nonactive,
+    track_nonactive,
+
+    // Prayer, Message, and User images
+    pray,
+    message,
+    user,
+    back,
+    filter,
+
+    three_dots,
+    share,
+    close,
+    search,
+    ceklis,
+    rubish,
+
+    location,
+    date,
+
+    done,
 }

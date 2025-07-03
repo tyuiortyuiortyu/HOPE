@@ -1,7 +1,6 @@
 import "../global.css";
-import { SafeAreaView, View, Text } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Link } from "expo-router";
+import { Redirect } from "expo-router";
 
 import Splash from "./splash";
 
@@ -16,20 +15,12 @@ const App = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  return (
-    <SafeAreaView className="flex-1">
-      {isSplashVisible ? (
-        <Splash />
-      ) : (
-        <View className="flex-1 justify-center items-center">
-          <Text className="text-3xl font-yLight">HOPE</Text>
-          <Link href={"(auth)/welcome"} className="text-xs">
-            Go to welcome
-          </Link>
-        </View>
-      )}
-    </SafeAreaView>
-  );
+  if (isSplashVisible) {
+    return <Splash />;
+  }
+
+  // Redirect directly to welcome after splash
+  return <Redirect href="/(auth)/welcome" />;
 };
 
 export default App;
