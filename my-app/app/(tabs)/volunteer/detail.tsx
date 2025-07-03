@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+
   },
   headerTop: {
     flexDirection: 'row',
@@ -206,6 +207,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     tintColor: '#374151',
+
   },
   headerTitle: {
     fontSize: 20,

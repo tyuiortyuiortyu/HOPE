@@ -45,6 +45,9 @@ const PilihanOpsi = ({ label, options, value, onSelect }) => (
         <TouchableOpacity
           key={option}
           onPress={() => onSelect(option)}
+          style={{ backgroundColor: value === option ? '#82C7C1' : '#D9D9D9' }}
+          className="px-5 py-3 rounded-[15px] me-3 items-center"
+
           style={{ 
             backgroundColor: value === option ? '#82BFB7' : '#FFFFFF',
             borderColor: value === option ? '#82BFB7' : '#E5E7EB',
@@ -342,6 +345,12 @@ const PendaftaranScreen = () => {
         </View>
       </ScrollView>
 
+      <View className="px-5 py-3 bg-white border-0 border-gray-200">
+        <TouchableOpacity 
+          onPress={handleDaftar}
+          disabled={!isFormValid}
+          style={{ backgroundColor: '#82C7C1', opacity: isFormValid ? 1 : 0.5 }}
+          className="bg-[#82C7C1] py-3  rounded-full items-center justify-center "
       {/* Submit Button */}
       <View className="px-5 py-4 bg-white border-t border-gray-100 shadow-lg">
         <TouchableOpacity
@@ -368,7 +377,7 @@ const PendaftaranScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#FFFFFF',
   },
   headerTop: {
     flexDirection: 'row',
