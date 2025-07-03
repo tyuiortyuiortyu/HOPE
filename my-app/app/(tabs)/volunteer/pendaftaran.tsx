@@ -14,16 +14,30 @@ import images from '../../../constants/images'; // Pastikan path ini benar
 
 // Komponen untuk input teks biasa
 const FormField = ({ label, placeholder, keyboardType = 'default', value, onChangeText }) => (
-  <View className="mb-4">
-    <Text className="text-base font-semibold text-black mb-2">{label}</Text>
-    <TextInput
-      className="bg-gray-100 rounded-lg px-4 py-3 text-base border border-gray-200"
-      placeholder={placeholder || `Masukkan ${label}`}
-      placeholderTextColor="#9CA3AF"
-      value={value}
-      onChangeText={onChangeText}
-      keyboardType={keyboardType}
-    />
+  <View style={{ marginBottom: 16 }}>
+    <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 8, color: '#374151' }}>
+      {label}
+    </Text>
+    <View style={{ width: '100%' }}> {/* Bungkus dengan View */}
+      <TextInput
+        style={{
+          width: '100%', // ✅ wajib
+          backgroundColor: '#F3F4F6',
+          borderRadius: 10,
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          fontSize: 16,
+          color: '#1F2937',
+          borderWidth: 1,
+          borderColor: '#D1D5DB',
+        }}
+        placeholder={placeholder || `Masukkan ${label}`}
+        placeholderTextColor="#9CA3AF"
+        keyboardType={keyboardType}
+        value={value}
+        onChangeText={onChangeText}
+      />
+    </View>
   </View>
 );
 
@@ -36,8 +50,8 @@ const PilihanOpsi = ({ label, options, value, onSelect }) => (
         <TouchableOpacity
           key={option}
           onPress={() => onSelect(option)}
-          style={{ backgroundColor: value === option ? '#000000' : '#D9D9D9' }}
-          className="px-5 py-3 rounded-full flex-1 items-center"
+          style={{ backgroundColor: value === option ? '#82C7C1' : '#D9D9D9' }}
+          className="px-5 py-3 rounded-[15px] me-3 items-center"
         >
           <Text style={{ color: value === option ? '#FFFFFF' : '#000000' }} className="font-semibold">{option}</Text>
         </TouchableOpacity>
@@ -174,12 +188,12 @@ const PendaftaranScreen = () => {
         </View>
       </ScrollView>
 
-      <View className="px-5 py-3 bg-white border-t border-gray-200">
+      <View className="px-5 py-3 bg-white border-0 border-gray-200">
         <TouchableOpacity 
           onPress={handleDaftar}
           disabled={!isFormValid}
-          style={{ backgroundColor: 'black', opacity: isFormValid ? 1 : 0.5 }}
-          className="py-4 rounded-full items-center justify-center"
+          style={{ backgroundColor: '#82C7C1', opacity: isFormValid ? 1 : 0.5 }}
+          className="bg-[#82C7C1] py-3  rounded-full items-center justify-center "
         >
           <Text className="text-white text-lg font-bold">Daftar</Text>
         </TouchableOpacity>
@@ -191,7 +205,7 @@ const PendaftaranScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF6F6',
+    backgroundColor: '#FFFFFF',
   },
   shadow: {
     shadowColor: "#000",

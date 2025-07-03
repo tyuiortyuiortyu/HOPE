@@ -151,8 +151,8 @@ const ActivityDetailScreen = () => {
         </View>
       </ScrollView>
 
-      <View className="px-5 py-3 bg-white border-t border-gray-200">
-        <TouchableOpacity className="bg-black py-4 rounded-full items-center justify-center"
+      <View className="px-5 py-3 bg-white border-0 border-gray-200">
+        <TouchableOpacity className="bg-black py-3  rounded-full items-center justify-center"
          onPress={handleNavigateToPendaftaran}>
           <Text className="text-white text-lg font-bold">Daftar</Text>
         </TouchableOpacity>
@@ -164,7 +164,7 @@ const ActivityDetailScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF6F6',
+    backgroundColor: '#FFFFFF',
   },
   shadow: {
     shadowColor: "#000",
