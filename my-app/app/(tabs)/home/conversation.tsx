@@ -6,9 +6,12 @@ import {
   SafeAreaView,
   ScrollView,
   TextInput,
+  Image
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+  
+import images from '../../../constants/images';
 
 const ConversationScreen = () => {
   const [message, setMessage] = useState('');
@@ -22,7 +25,7 @@ const ConversationScreen = () => {
           className="mr-4"
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={24} color="#000" />
+          <Image source={images.back} className="w-6 h-6" resizeMode="contain" />
         </TouchableOpacity>
         <Text className="text-xl font-bold text-gray-800">Inbox</Text>
       </View>

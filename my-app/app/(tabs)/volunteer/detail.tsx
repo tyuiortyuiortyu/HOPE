@@ -2,9 +2,8 @@
 
 import { View, Text, Image, ScrollView, TouchableOpacity, StatusBar, StyleSheet } from 'react-native';
 import React from 'react';
-import { Feather } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams, Redirect } from 'expo-router';
-import images from '../../../constants/images'; // Pastikan path ini benar
+import images from '../../../constants/images';
 
 // DATA DUMMY LENGKAP - HARUS SAMA DENGAN DI HALAMAN SEBELUMNYA
 // Di aplikasi nyata, Anda akan fetch data dari API, jadi tidak perlu duplikasi seperti ini.
@@ -16,7 +15,7 @@ const dummyActivities = [
     date: '12 Mei 2025',
     image: images.volunteer1,
     organizer: 'Volunteer by Hope',
-    organizerLogo: images.Logo1,
+    organizerLogo: images.Logo1, // Fixed logo reference
     description: 'Kegiatan "Sebersi" atau "Seminggu Bersih-Bersih" adalah inisiatif kami untuk membersihkan area publik yang sering terabaikan. Bergabunglah bersama kami untuk membuat lingkungan lebih sehat.',
     benefit: 'Selain mendapatkan pengalaman berharga, Anda akan menerima sertifikat partisipasi, konsumsi selama acara, dan kesempatan untuk memperluas jaringan dengan sesama relawan.',
     terms: [ 'Berusia minimal 17 tahun', 'Sehat jasmani dan rohani', 'Bersedia mengikuti arahan koordinator', 'Membawa botol minum pribadi' ]
@@ -76,85 +75,112 @@ const ActivityDetailScreen = () => {
   const { id } = useLocalSearchParams();
 
   const handleNavigateToPendaftaran = (activityId) => {
-    // ==========================================================
-    // PERUBAHAN UTAMA DI SINI
-    // ==========================================================
-    // Path harus mencakup nama folder induknya: 'volunteer'
     router.push({
-      pathname: '/volunteer/pendaftaran', // <-- INI PATH YANG BENAR
+      pathname: '/volunteer/pendaftaran',
       params: { activityId: id },
     });
-    console.log("Mengarahkan ke /volunteer/pendaftaran dengan ID:", activityId);
   };
 
   const activity = dummyActivities.find(act => act.id.toString() === id);
 
   if (!activity) {
-    // Jika tidak ada ID atau data tidak ditemukan, kembali ke halaman utama
     return <Redirect href="/volunteer" />;
   }
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        
-        <View className="relative">
-          <Image source={activity.image} className="w-full h-64 rounded" resizeMode="cover"/>
-          <TouchableOpacity className="absolute top-14 left-5 p-2 rounded-full"  onPress={() => router.back()}>
-            <Feather name="arrow-left" size={24} color="black" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      
+      {/* Standardized Header */}
+      <View className="bg-white px-4 py-3">
+        <View style={styles.headerTop}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Image 
+              source={images.back} 
+              style={styles.backIcon} 
+              resizeMode="contain" 
+            />
           </TouchableOpacity>
+          <Text style={styles.headerTitle}>Detail Volunteer</Text>
+        </View>
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Hero Image */}
+        <View className="relative">
+          <Image source={activity.image} className="w-full h-64" resizeMode="cover"/>
         </View>
 
-        <View className="p-5">
-          <Text className="text-2xl font-bold text-black">{activity.title}</Text>
+        {/* Content */}
+        <View className="px-6 py-6 bg-white">
+          {/* Title */}
+          <Text className="text-2xl font-bold text-gray-900 mb-4">{activity.title}</Text>
           
-          <View className="mt-4 space-y-2">
+          {/* Location & Date */}
+          <View className="space-y-3 mb-6">
             <View className="flex-row items-center">
-              <View className="w-5 h-5 rounded-full border-2 border-gray-400 mr-3" />
+              <View className="w-5 h-5 items-center justify-center mr-3">
+                <Image source={images.location} className="w-4 h-4" resizeMode="contain" />
+              </View>
               <Text className="text-base text-gray-700">{activity.location}</Text>
             </View>
             <View className="flex-row items-center">
-              <View className="w-5 h-5 rounded-full border-2 border-gray-400 mr-3" />
+              <View className="w-5 h-5 items-center justify-center mr-3">
+                <Image source={images.date} className="w-4 h-4" resizeMode="contain" />
+              </View>
               <Text className="text-base text-gray-700">{activity.date}</Text>
             </View>
           </View>
 
-          <View className="border-b border-gray-200 my-5" />
-
-          <View className="flex-row items-center">
-            <Image source={activity.organizerLogo} className="w-10 h-10 rounded-full" resizeMode="contain"/>
-            <Text className="text-lg font-semibold text-black ml-3">{activity.organizer}</Text>
+          {/* Organizer */}
+          <View className="flex-row items-center py-4 px-4 bg-gray-50 rounded-xl mb-6">
+            <Image source={activity.organizerLogo} className="w-12 h-12 rounded-full" resizeMode="contain"/>
+            <View className="ml-3">
+              <Text className="text-sm text-gray-500">Diselenggarakan oleh</Text>
+              <Text className="text-lg font-semibold text-gray-900">{activity.organizer}</Text>
+            </View>
           </View>
           
-          <View className="border-b border-gray-200 my-5" />
-          
+          {/* Description */}
           <View className="mb-6">
-            <Text className="text-xl font-bold text-black mb-2">Deskripsi</Text>
-            <Text className="text-base text-gray-600 leading-relaxed">{activity.description}</Text>
+            <Text className="text-xl font-bold text-gray-900 mb-3">Deskripsi Kegiatan</Text>
+            <Text className="text-base text-gray-600 leading-6">{activity.description}</Text>
           </View>
           
+          {/* Benefits */}
           <View className="mb-6">
-            <Text className="text-xl font-bold text-black mb-2">Benefit</Text>
-            <Text className="text-base text-gray-600 leading-relaxed">{activity.benefit}</Text>
+            <Text className="text-xl font-bold text-gray-900 mb-3">Benefit yang Didapat</Text>
+            <View className="bg-green-50 p-4 rounded-xl">
+              <Text className="text-base text-gray-700 leading-6">{activity.benefit}</Text>
+            </View>
           </View>
           
-          <View className="mb-8 flex-row">
-            <View className="w-1 bg-black mr-3" />
-            <View className="flex-1">
-              <Text className="text-xl font-bold text-black mb-2">Syarat dan Ketentuan</Text>
+          {/* Terms */}
+          <View className="mb-8">
+            <Text className="text-xl font-bold text-gray-900 mb-3">Syarat dan Ketentuan</Text>
+            <View className="bg-blue-50 p-4 rounded-xl">
               {activity.terms.map((term, index) => (
-                <Text key={index} className="text-base text-gray-600 ml-2">• {term}</Text>
+                <View key={index} className="flex-row items-start mb-2">
+                  <View className="w-2 h-2 rounded-full mt-2 mr-3" style={{ backgroundColor: '#82BFB7' }} />
+                  <Text className="text-base text-gray-700 flex-1 leading-6">{term}</Text>
+                </View>
               ))}
             </View>
           </View>
         </View>
       </ScrollView>
 
-      <View className="px-5 py-3 bg-white border-0 border-gray-200">
-        <TouchableOpacity className="bg-black py-3  rounded-full items-center justify-center"
-         onPress={handleNavigateToPendaftaran}>
-          <Text className="text-white text-lg font-bold">Daftar</Text>
+      {/* Register Button */}
+      <View className="px-6 py-4 bg-white border-t border-gray-100">
+        <TouchableOpacity 
+          className="py-4 rounded-xl items-center justify-center"
+          style={{ backgroundColor: '#82BFB7' }}
+          onPress={handleNavigateToPendaftaran}
+        >
+          <Text className="text-white text-lg font-bold">Daftar Volunteer</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -165,13 +191,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+
   },
-  shadow: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 12,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#374151',
+
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F2937',
   },
 });
 

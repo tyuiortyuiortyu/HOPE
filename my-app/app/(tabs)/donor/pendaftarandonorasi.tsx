@@ -1,13 +1,11 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState, useMemo } from 'react';
-import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, SafeAreaView, Alert, Modal, Pressable, Platform } from 'react-native';
+import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, SafeAreaView, Alert, Modal, Pressable, Platform, StyleSheet, StatusBar } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
-// Diasumsikan path ini benar
-// import images from '../../../constants/images'; 
+import images from '../../../constants/images';
 
 const syaratDataAsi = [
   "Ibu menyusui yang sehat secara fisik dan mental.",
@@ -25,7 +23,6 @@ const syaratDataAsi = [
   "Bersedia mengikuti prosedur penyimpanan dan pengiriman ASI yang ditentukan.",
 ];
 
-// PERBAIKAN 5: Typo 'pplaceholder' diperbaiki menjadi 'placeholder'
 const formFieldsAsi = [
   // Data Ibu
   { name: 'namaLengkap', label: 'Nama Lengkap Ibu', placeholder: 'Masukkan nama lengkap Anda', section: 'ibu' },
@@ -44,10 +41,10 @@ const formFieldsAsi = [
 ];
 
 const FormField = ({ label, placeholder, keyboardType = 'default', value, onChangeText }) => (
-  <View style={{ marginBottom: 16 }}>
-    <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 8, color: '#374151' }}>{label}</Text>
-    <TextInput 
-      style={{ backgroundColor: '#F3F4F6', borderRadius: 10, paddingHorizontal: 16, paddingVertical: 12, fontSize: 16, color: '#1F2937', borderWidth: 1, borderColor: '#D1D5DB' }}
+  <View className="mb-5">
+    <Text className="text-base font-semibold text-gray-900 mb-3">{label}</Text>
+    <TextInput
+      className="bg-white rounded-xl px-4 py-4 text-base border border-gray-200 shadow-sm"
       placeholder={placeholder}
       placeholderTextColor="#9CA3AF"
       keyboardType={keyboardType}
@@ -58,91 +55,71 @@ const FormField = ({ label, placeholder, keyboardType = 'default', value, onChan
 );
 
 const SyaratItem = ({ text }) => (
-  <View style={{ flexDirection: 'row', marginBottom: 8 }}>
-    <Text style={{ marginRight: 8, color: '#4B5563' }}>•</Text>
-    <Text style={{ flex: 1, fontSize: 16, color: '#4B5563', lineHeight: 24 }}>{text}</Text>
+  <View className="flex-row items-start mb-2">
+    <Text className="text-gray-500 mr-2">•</Text>
+    <Text className="flex-1 text-sm text-gray-600 leading-5">{text}</Text>
   </View>
 );
 
-// ===================================================================
-// KOMPONEN BARU: Untuk pertanyaan Ya/Tidak
-// ===================================================================
 const PilihanGanda = ({ label, value, onSelect, showInputOn, alasan, onAlasanChange, placeholderAlasan }) => (
-    <View style={{ marginBottom: 20 }}>
-      <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 10, color: '#374151' }}>{label}</Text>
-      <View style={{ flexDirection: 'row', marginBottom: 12 }}>
-        <TouchableOpacity
-          onPress={() => onSelect('Ya')}
-          style={{
-            backgroundColor: value === 'Ya' ? '#82C7C1' : '#F3F4F6',
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            borderRadius: 8,
-            marginRight: 10,
-            borderWidth: 1,
-            borderColor: value === 'Ya' ? '#82C7C1' : '#D1D5DB'
-          }}
-        >
-          <Text style={{ color: value === 'Ya' ? '#fff' : '#374151', fontWeight: 'bold' }}>Ya</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => onSelect('Tidak')}
-          style={{
-            backgroundColor: value === 'Tidak' ? '#82C7C1' : '#F3F4F6',
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            borderRadius: 8,
-            borderWidth: 1,
-            borderColor: value === 'Tidak' ? '#82C7C1' : '#D1D5DB'
-          }}
-        >
-          <Text style={{ color: value === 'Tidak' ? '#fff' : '#374151', fontWeight: 'bold' }}>Tidak</Text>
-        </TouchableOpacity>
-      </View>
-      {value === showInputOn && (
-        <TextInput
-          placeholder={placeholderAlasan || "Silakan berikan penjelasan"}
-          value={alasan}
-          onChangeText={onAlasanChange}
-          style={{
-            backgroundColor: '#F3F4F6',
-            borderRadius: 10,
-            paddingHorizontal: 16,
-            paddingVertical: 12,
-            fontSize: 16,
-            color: '#1F2937',
-            borderWidth: 1,
-            borderColor: '#D1D5DB'
-          }}
-        />
-      )}
+  <View className="mb-5">
+    <Text className="text-base font-semibold text-gray-900 mb-3">{label}</Text>
+    <View className="flex-row space-x-3 mb-3">
+      <TouchableOpacity
+        onPress={() => onSelect('Ya')}
+        style={{ 
+          backgroundColor: value === 'Ya' ? '#82C7C1' : '#FFFFFF',
+          borderColor: value === 'Ya' ? '#82C7C1' : '#E5E7EB',
+          borderWidth: 1
+        }}
+        className="px-6 py-3 rounded-xl flex-1 items-center shadow-sm"
+      >
+        <Text style={{ color: value === 'Ya' ? '#FFFFFF' : '#374151' }} className="font-semibold text-sm">Ya</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => onSelect('Tidak')}
+        style={{ 
+          backgroundColor: value === 'Tidak' ? '#82C7C1' : '#FFFFFF',
+          borderColor: value === 'Tidak' ? '#82C7C1' : '#E5E7EB',
+          borderWidth: 1
+        }}
+        className="px-6 py-3 rounded-xl flex-1 items-center shadow-sm"
+      >
+        <Text style={{ color: value === 'Tidak' ? '#FFFFFF' : '#374151' }} className="font-semibold text-sm">Tidak</Text>
+      </TouchableOpacity>
     </View>
+    {value === showInputOn && (
+      <TextInput
+        placeholder={placeholderAlasan || "Silakan berikan penjelasan"}
+        value={alasan}
+        onChangeText={onAlasanChange}
+        className="bg-white rounded-xl px-4 py-4 text-base border border-gray-200 shadow-sm"
+        placeholderTextColor="#9CA3AF"
+      />
+    )}
+  </View>
 );
 
 const PilihanOpsi = ({ label, options, value, onSelect }) => (
-    <View style={{ marginBottom: 20 }}>
-      <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 10, color: '#374151' }}>{label}</Text>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-        {options.map(option => (
-          <TouchableOpacity
-            key={option}
-            onPress={() => onSelect(option)}
-            style={{
-              backgroundColor: value === option ? '#82C7C1' : '#F3F4F6',
-              paddingVertical: 10,
-              paddingHorizontal: 20,
-              borderRadius: 8,
-              marginRight: 10,
-              marginBottom: 10,
-              borderWidth: 1,
-              borderColor: value === option ? '#82C7C1' : '#D1D5DB'
-            }}
-          >
-            <Text style={{ color: value === option ? '#fff' : '#374151', fontWeight: 'bold' }}>{option}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+  <View className="mb-5">
+    <Text className="text-base font-semibold text-gray-900 mb-3">{label}</Text>
+    <View className="flex-row space-x-3">
+      {options.map(option => (
+        <TouchableOpacity
+          key={option}
+          onPress={() => onSelect(option)}
+          style={{ 
+            backgroundColor: value === option ? '#82C7C1' : '#FFFFFF',
+            borderColor: value === option ? '#82C7C1' : '#E5E7EB',
+            borderWidth: 1
+          }}
+          className="px-6 py-3 rounded-xl flex-1 items-center shadow-sm"
+        >
+          <Text style={{ color: value === option ? '#FFFFFF' : '#374151' }} className="font-semibold text-sm">{option}</Text>
+        </TouchableOpacity>
+      ))}
     </View>
+  </View>
 );
 
 const PendaftaranDonorAsiScreen = () => {
@@ -156,13 +133,9 @@ const PendaftaranDonorAsiScreen = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  // PERBAIKAN 1: Hooks dipindahkan ke dalam komponen
   const [jenisKelamin, setJenisKelamin] = useState('');
   const [showGenderModal, setShowGenderModal] = useState(false);
 
-  // ===================================================================
-  // STATE BARU: Untuk pertanyaan Ya/Tidak
-  // ===================================================================
   const [sedangHamil, setSedangHamil] = useState(''); // 'Ya' atau 'Tidak'
   const [menyusuiLain, setMenyusuiLain] = useState('');
   const [alasanMenyusuiLain, setAlasanMenyusuiLain] = useState('');
@@ -188,21 +161,14 @@ const PendaftaranDonorAsiScreen = () => {
     if (!result.canceled) setKtpImage(result.assets[0].uri);
   };
 
- // ===================================================================
-  // VALIDASI BARU: Memeriksa semua field termasuk pertanyaan baru
-  // ===================================================================
-   const isFormValid = useMemo(() => {
+  const isFormValid = useMemo(() => {
     const requiredFormFields = formFieldsAsi.every(field => formData[field.name]?.trim());
     const phoneValid = /^\d+$/.test(formData.nomorTelepon || '');
     
-    // Validasi pertanyaan Ya/Tidak Ibu
     const hamilValid = sedangHamil !== '';
     const menyusuiValid = (menyusuiLain === 'Tidak') || (menyusuiLain === 'Ya' && alasanMenyusuiLain.trim() !== '');
     const pernahDonorValid = (pernahDonor === 'Tidak') || (pernahDonor === 'Ya' && alasanPernahDonor.trim() !== '');
 
-    // ===================================================================
-    // LANGKAH 5: TAMBAHKAN VALIDASI BARU DI SINI
-    // ===================================================================
     const bayiCukupBulanValid = lahirCukupBulan !== '';
     const metodePersalinanValid = metodePersalinan !== '';
     const asiEksklusifValid = (asiEksklusif === 'Ya') || (asiEksklusif === 'Tidak' && asupanLain.trim() !== '');
@@ -234,196 +200,316 @@ const PendaftaranDonorAsiScreen = () => {
     setIsSubmitted(true);
   };
 
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <Stack.Screen options={{ 
-          headerStyle: { backgroundColor: '#C6E6E3' }, 
-          headerTitle: '', 
-          headerLeft: () => (<TouchableOpacity onPress={() => router.back()} style={{marginLeft: 8}}><Ionicons name="arrow-back" size={28} color="black" /></TouchableOpacity>) 
-        }} 
-      />
-
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
-        {isSubmitted ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32, marginTop: 60 }}>
-            <Ionicons name="checkmark-circle" size={80} color="#10B981" style={{ marginBottom: 16 }} />
-            <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#1F2937', textAlign: 'center', marginBottom: 8 }}>Pendaftaran Berhasil</Text>
-            <Text style={{ fontSize: 16, color: '#4B5563', textAlign: 'center', marginBottom: 24 }}>
-              Terima kasih telah mendaftar. Pihak {locationName || 'rumah sakit'} akan segera menghubungi Anda.
-            </Text>
-            <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#82C7C1', paddingVertical: 12, paddingHorizontal: 24, borderRadius: 999 }}>
-              <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Kembali</Text>
+  // Success screen
+  if (isSubmitted) {
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+        
+        {/* Header */}
+        <View className="bg-white px-4 py-3">
+          <View style={styles.headerTop}>
+            <TouchableOpacity 
+              style={styles.backButton}
+              onPress={() => router.back()}
+            >
+              <Image 
+                source={images.back} 
+                style={styles.backIcon} 
+                resizeMode="contain" 
+              />
             </TouchableOpacity>
+            <Text style={styles.headerTitle}>Pendaftaran Berhasil</Text>
           </View>
-        ) : (
-          <>
-            {/* PERBAIKAN 6: Menggunakan {uri: ...} untuk source gambar dari URL */}
-            <Image source={locationImage} style={{ width: '100%', height: 220 }} resizeMode="cover" />
-            <View style={{ padding: 20 }}>
-              <View style={{ marginBottom: 24 }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1F2937', marginBottom: 8 }}>{locationName}</Text>
-                <Text style={{ fontSize: 12, color: '#1F2937', marginBottom: 8 }}>{locationAddress}</Text>
-                <Text style={{ fontSize: 14, fontWeight:"bold", color: '#FF0000', marginBottom: 8 }}>Dapat menampung {locationslots} slot</Text>
-                <Text style={{ fontSize: 16, color: '#4B5563', lineHeight: 24 }}>{locationName} mengajak para ibu menyusui untuk berbagi kasih sayang dan memberikan harapan baru bagi bayi-bayi yang membutuhkan melalui program donor ASI. Setetes ASI yang Ibu berikan sangat berharga dan dapat menyelamatkan kehidupan bayi yang tidak dapat memperoleh ASI dari ibunya sendiri. Mari wujudkan kepedulian kita dan menjadi pahlawan ASI bagi generasi penerus bangsa.</Text>
-              </View>
+        </View>
 
-              <View style={{ marginBottom: 24 }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1F2937', marginBottom: 12 }}>Syarat & Ketentuan</Text>
-                {syaratDataAsi.map((syarat, i) => <SyaratItem key={i} text={syarat} />)}
-              </View>
+        <View className="flex-1 items-center justify-center p-8">
+          <Image source={images.done} className="w-20 h-20 mb-4" resizeMode="contain" />
+          <Text className="text-2xl font-bold text-center mb-2">Pendaftaran Berhasil!</Text>
+          <Text className="text-base text-gray-600 text-center mb-6">
+            Terima kasih telah mendaftar. Pihak {locationName || 'rumah sakit'} akan segera menghubungi Anda.
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={{ backgroundColor: '#82C7C1' }}
+            className="py-3 px-8 rounded-full"
+          >
+            <Text className="text-white font-bold text-base">Kembali</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 
-              {/* PERBAIKAN 2: Semua form sekarang ada di dalam satu View container yang logis */}
-              <View>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1F2937', marginBottom: 4 }}>Form Pendaftaran</Text>
-                <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#1F2937', marginBottom: 16 }}>Wajib mengisi semua pertanyaan sebelum "Daftar"</Text>
-                
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1F2937', marginBottom: 12, borderTopWidth: 1, borderTopColor: '#E5E7EB', paddingTop: 16 }}>A. Data Diri dan Riwayat Kesehatan Ibu</Text>
-                
-                {/* PERBAIKAN 4: Menggunakan .map untuk render form secara dinamis */}
-                {formFieldsAsi.filter(f => f.section === 'ibu').map(field => (
-                  <FormField
-                    key={field.name}
-                    label={field.label}
-                    placeholder={field.placeholder}
-                    keyboardType={field.keyboardType}
-                    value={formData[field.name] || ''}
-                    onChangeText={text => handleInputChange(field.name, text)}
-                  />
-                ))}
+  // Main form screen
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFF6F6" />
+      
+      {/* Header */}
+      <View className="bg-white px-4 py-3">
+        <View style={styles.headerTop}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Image 
+              source={images.back} 
+              style={styles.backIcon} 
+              resizeMode="contain" 
+            />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Pendaftaran Donor ASI</Text>
+        </View>
+      </View>
 
-                {/* PERTANYAAN BARU DITAMBAHKAN DI SINI */}
-                {/* =================================================================== */}
-                <PilihanGanda
-                    label="Apakah Anda sedang hamil?"
-                    value={sedangHamil}
-                    onSelect={setSedangHamil}
-                />
-                <PilihanGanda
-                    label="Apakah Anda sedang menyusui bayi lain selain bayi Anda? (kalau ya, apakah sering atau hanya sesekali?)"
-                    value={menyusuiLain}
-                    onSelect={setMenyusuiLain}
-                    showInputOn="Ya" // Tampilkan input jika jawaban "Ya"
-                    alasan={alasanMenyusuiLain}
-                    onAlasanChange={setAlasanMenyusuiLain}
-                    placeholderAlasan="Jelaskan (misal: bayi kembar, dll)"
-                />
-                <PilihanGanda
-                    label="Apakah Anda pernah mendonorkan ASI sebelumnya? (Kalau pernah, sebutkan di mana/kapan)"
-                    value={pernahDonor}
-                    onSelect={setPernahDonor}
-                    showInputOn="Ya" // Tampilkan input jika jawaban "Ya"
-                    alasan={alasanPernahDonor}
-                    onAlasanChange={setAlasanPernahDonor}
-                    placeholderAlasan="Sebutkan di mana/kapan"
-                />
+      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+        {/* Hero Image */}
+        <View className="relative">
+          <Image
+            source={locationImage}
+            className="w-full h-64"
+            resizeMode="cover"
+          />
+          <View className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 to-transparent h-20" />
+        </View>
 
-                {/* Tanggal Lahir Ibu */}
-                <View style={{ marginBottom: 16 }}>
-                <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 8, color: '#374151' }}>Tanggal Lahir Ibu</Text>
-                <TouchableOpacity
-                    onPress={() => setShowDatePicker(true)}
-                    style={{ backgroundColor: '#F3F4F6', borderRadius: 10, padding: 12, borderWidth: 1, borderColor: '#D1D5DB' }}>
-                    <Text style={{ fontSize: 16, color: '#1F2937' }}>{tanggalLahir.toLocaleDateString('id-ID')}</Text>
-                </TouchableOpacity>
-                {showDatePicker && (
-                    <DateTimePicker
-                    value={tanggalLahir}
-                    mode="date"
-                    display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
-                    onChange={(event, selectedDate) => {
-                        setShowDatePicker(false);
-                        if (selectedDate) setTanggalLahir(selectedDate);
-                    }}
-                    themeVariant="light"
-                    />
-                )}
-                </View>
+        {/* Content */}
+        <View className="px-5 py-6 bg-white -mt-6 mx-4 rounded-t-3xl shadow-lg">
+          {/* Location Details */}
+          <View className="mb-6">
+            <Text className="text-xl font-bold text-gray-900 mb-2">{locationName}</Text>
+            <Text className="text-sm text-gray-600 mb-2">{locationAddress}</Text>
+            <Text className="text-sm font-bold text-red-600 mb-4">Dapat menampung {locationslots} slot</Text>
+            <Text className="text-sm text-gray-700 leading-5">
+              {locationName} mengajak para ibu menyusui untuk berbagi kasih sayang dan memberikan harapan baru bagi bayi-bayi yang membutuhkan melalui program donor ASI.
+            </Text>
+          </View>
 
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1F2937', marginBottom: 12, borderTopWidth: 1, borderTopColor: '#E5E7EB', paddingTop: 16 }}>B. Informasi Bayi</Text>
-                {formFieldsAsi.filter(f => f.section === 'bayi').map(field => (
-                  <FormField
-                    key={field.name}
-                    label={field.label}
-                    placeholder={field.placeholder}
-                    keyboardType={field.keyboardType}
-                    value={formData[field.name] || ''}
-                    onChangeText={text => handleInputChange(field.name, text)}
-                  />
-                ))}
+          <View className="border-b border-gray-100 mb-6" />
 
-                <PilihanGanda
-                    label="Apakah bayi Anda lahir cukup bulan?"
-                    value={lahirCukupBulan}
-                    onSelect={setLahirCukupBulan}
-                />
-                <PilihanOpsi
-                    label="Metode persalinan:"
-                    options={['Normal', 'Caesar']}
-                    value={metodePersalinan}
-                    onSelect={setMetodePersalinan}
-                />
-                <PilihanGanda
-                    label="Apakah bayi Anda mengonsumsi ASI Eksklusif? (kalau tidak, jelaskan alasannya)"
-                    value={asiEksklusif}
-                    onSelect={setAsiEksklusif}
-                    showInputOn="Tidak" // Tampilkan input jika jawaban "Tidak"
-                    alasan={asupanLain}
-                    onAlasanChange={setAsupanLain}
-                    placeholderAlasan="Jika tidak, sebutkan asupan lain yang diberikan"
-/>
-                
-                <View style={{ marginBottom: 16 }}>
-                    <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 8, color: '#374151' }}>Jenis Kelamin Bayi</Text>
-                    <TouchableOpacity
-                      onPress={() => setShowGenderModal(true)}
-                      style={{ backgroundColor: '#F3F4F6', borderRadius: 10, padding: 12, borderWidth: 1, borderColor: '#D1D5DB' }}>
-                      <Text style={{ fontSize: 16, color: '#1F2937' }}>{jenisKelamin || 'Pilih Jenis Kelamin'}</Text>
-                    </TouchableOpacity>
-                    <Modal visible={showGenderModal} transparent animationType="slide">
-                      <Pressable onPress={() => setShowGenderModal(false)} style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000080' }}>
-                        <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 12, width: '80%' }}>
-                          <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16 }}>Pilih Jenis Kelamin Bayi</Text>
-                          {['Laki-laki', 'Perempuan'].map((option) => (
-                            <Pressable key={option} onPress={() => { setJenisKelamin(option); setShowGenderModal(false); }} style={{ paddingVertical: 12 }}>
-                              <Text style={{ fontSize: 16 }}>{option}</Text>
-                            </Pressable>
-                          ))}
-                        </View>
-                      </Pressable>
-                    </Modal>
-                </View>
-
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#1F2937', marginBottom: 12, borderTopWidth: 1, borderTopColor: '#E5E7EB', paddingTop: 16 }}>C. Upload KTP</Text>
-                <TouchableOpacity onPress={handleImageUpload} style={{ backgroundColor: '#F3F4F6', borderRadius: 16, height: 160, justifyContent: 'center', alignItems: 'center', borderStyle: 'dashed', borderColor: '#D1D5DB', borderWidth: 2, overflow: 'hidden', marginBottom: 24 }}>
-                  {ktpImage ? (
-                    <Image source={{ uri: ktpImage }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
-                  ) : (
-                    <>
-                      <Ionicons name="camera-outline" size={40} color="#9CA3AF" />
-                      <Text style={{ color: '#6B7280', marginTop: 8 }}>Ketuk untuk mengunggah KTP</Text>
-                    </>
-                  )}
-                </TouchableOpacity>
-
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 24 }}>
-                  <Checkbox value={isChecked} onValueChange={setIsChecked} color={isChecked ? '#82C7C1' : undefined} style={{ width: 24, height: 24, marginRight: 12 }} />
-                  <Text style={{ flex: 1, fontSize: 16, color: '#374151' }}>Saya telah membaca dan menyetujui S&K yang berlaku.</Text>
-                </View>
-
-                <TouchableOpacity
-                  onPress={handleDaftar}
-                  disabled={!isFormValid}
-                  style={{ backgroundColor: '#82C7C1', paddingVertical: 16, borderRadius: 999, alignItems: 'center', opacity: isFormValid ? 1 : 0.5, marginBottom: 32 }}>
-                  <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Daftar</Text>
-                </TouchableOpacity>
-              </View> 
-              {/* PERBAIKAN 3: Menghapus </View> yang salah dan berlebihan dari sini */}
+          {/* Syarat & Ketentuan */}
+          <View className="mb-6">
+            <Text className="text-lg font-bold text-gray-900 mb-4">Syarat & Ketentuan</Text>
+            <View className="bg-gray-50 rounded-xl p-4">
+              {syaratDataAsi.map((syarat, i) => <SyaratItem key={i} text={syarat} />)}
             </View>
-          </>
-        )}
+          </View>
+
+          {/* Form */}
+          <View>
+            <Text className="text-xl font-bold text-gray-900 mb-6">Form Pendaftaran</Text>
+            
+            <Text className="text-lg font-semibold text-gray-900 mb-4">A. Data Diri dan Riwayat Kesehatan Ibu</Text>
+            
+            {formFieldsAsi.filter(f => f.section === 'ibu').map(field => (
+              <FormField
+                key={field.name}
+                label={field.label}
+                placeholder={field.placeholder}
+                keyboardType={field.keyboardType}
+                value={formData[field.name] || ''}
+                onChangeText={text => handleInputChange(field.name, text)}
+              />
+            ))}
+
+            <PilihanGanda
+              label="Apakah Anda sedang hamil?"
+              value={sedangHamil}
+              onSelect={setSedangHamil}
+            />
+
+            <PilihanGanda
+              label="Apakah Anda sedang menyusui bayi lain selain bayi Anda?"
+              value={menyusuiLain}
+              onSelect={setMenyusuiLain}
+              showInputOn="Ya"
+              alasan={alasanMenyusuiLain}
+              onAlasanChange={setAlasanMenyusuiLain}
+              placeholderAlasan="Jelaskan (misal: bayi kembar, dll)"
+            />
+
+            <PilihanGanda
+              label="Apakah Anda pernah mendonorkan ASI sebelumnya?"
+              value={pernahDonor}
+              onSelect={setPernahDonor}
+              showInputOn="Ya"
+              alasan={alasanPernahDonor}
+              onAlasanChange={setAlasanPernahDonor}
+              placeholderAlasan="Sebutkan di mana/kapan"
+            />
+
+            {/* Tanggal Lahir */}
+            <View className="mb-5">
+              <Text className="text-base font-semibold text-gray-900 mb-3">Tanggal Lahir Ibu</Text>
+              <TouchableOpacity
+                onPress={() => setShowDatePicker(true)}
+                className="bg-white rounded-xl px-4 py-4 border border-gray-200 shadow-sm">
+                <Text className="text-base text-gray-900">{tanggalLahir.toLocaleDateString('id-ID')}</Text>
+              </TouchableOpacity>
+              {showDatePicker && (
+                <DateTimePicker
+                  value={tanggalLahir}
+                  mode="date"
+                  display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
+                  onChange={(event, selectedDate) => {
+                    setShowDatePicker(false);
+                    if (selectedDate) setTanggalLahir(selectedDate);
+                  }}
+                  themeVariant="light"
+                />
+              )}
+            </View>
+
+            <Text className="text-lg font-semibold text-gray-900 mb-4 mt-6">B. Informasi Bayi</Text>
+            
+            {formFieldsAsi.filter(f => f.section === 'bayi').map(field => (
+              <FormField
+                key={field.name}
+                label={field.label}
+                placeholder={field.placeholder}
+                keyboardType={field.keyboardType}
+                value={formData[field.name] || ''}
+                onChangeText={text => handleInputChange(field.name, text)}
+              />
+            ))}
+
+            <PilihanGanda
+              label="Apakah bayi Anda lahir cukup bulan?"
+              value={lahirCukupBulan}
+              onSelect={setLahirCukupBulan}
+            />
+
+            <PilihanOpsi
+              label="Metode persalinan:"
+              options={['Normal', 'Caesar']}
+              value={metodePersalinan}
+              onSelect={setMetodePersalinan}
+            />
+
+            <PilihanGanda
+              label="Apakah bayi Anda mengonsumsi ASI Eksklusif?"
+              value={asiEksklusif}
+              onSelect={setAsiEksklusif}
+              showInputOn="Tidak"
+              alasan={asupanLain}
+              onAlasanChange={setAsupanLain}
+              placeholderAlasan="Jika tidak, sebutkan asupan lain yang diberikan"
+            />
+
+            {/* Jenis Kelamin Bayi */}
+            <View className="mb-5">
+              <Text className="text-base font-semibold text-gray-900 mb-3">Jenis Kelamin Bayi</Text>
+              <TouchableOpacity
+                onPress={() => setShowGenderModal(true)}
+                className="bg-white rounded-xl px-4 py-4 border border-gray-200 shadow-sm">
+                <Text className="text-base text-gray-900">{jenisKelamin || 'Pilih Jenis Kelamin'}</Text>
+              </TouchableOpacity>
+              <Modal visible={showGenderModal} transparent animationType="slide">
+                <Pressable onPress={() => setShowGenderModal(false)} className="flex-1 justify-center items-center bg-black/50">
+                  <View className="bg-white p-6 rounded-xl w-4/5">
+                    <Text className="text-lg font-bold mb-4">Pilih Jenis Kelamin Bayi</Text>
+                    {['Laki-laki', 'Perempuan'].map((option) => (
+                      <Pressable key={option} onPress={() => { setJenisKelamin(option); setShowGenderModal(false); }} className="py-3">
+                        <Text className="text-base">{option}</Text>
+                      </Pressable>
+                    ))}
+                  </View>
+                </Pressable>
+              </Modal>
+            </View>
+
+            {/* KTP Upload */}
+            <View className="mb-6">
+              <Text className="text-base font-semibold text-gray-900 mb-3">Upload Foto KTP</Text>
+              <TouchableOpacity
+                onPress={handleImageUpload}
+                className="bg-gray-50 rounded-2xl h-48 items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden"
+              >
+                {ktpImage ? (
+                  <Image
+                    source={{ uri: ktpImage }}
+                    className="w-full h-full rounded-2xl"
+                    resizeMode="cover"
+                  />
+                ) : (
+                  <View className="items-center">
+                    <View className="w-16 h-16 rounded-full bg-gray-200 items-center justify-center mb-3">
+                      <Ionicons name="camera-outline" size={24} color="#9CA3AF" />
+                    </View>
+                    <Text className="text-gray-500 font-medium">Ketuk untuk mengunggah KTP</Text>
+                    <Text className="text-gray-400 text-sm mt-1">JPG, PNG maksimal 5MB</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
+
+            {/* Terms and Conditions */}
+            <View className="flex-row items-start mb-8 p-4 bg-gray-50 rounded-xl">
+              <Checkbox
+                value={isChecked}
+                onValueChange={setIsChecked}
+                color={isChecked ? '#82C7C1' : undefined}
+                style={{ width: 20, height: 20, marginRight: 12, marginTop: 2 }}
+              />
+              <Text className="text-sm text-gray-700 flex-1 leading-5">
+                Saya telah membaca dan menyetujui{' '}
+                <Text className="font-semibold text-black">Syarat & Ketentuan</Text>
+                {' '}yang berlaku.
+              </Text>
+            </View>
+          </View>
+        </View>
       </ScrollView>
+
+      {/* Submit Button */}
+      <View className="px-5 py-4 bg-white border-t border-gray-100 shadow-lg">
+        <TouchableOpacity
+          onPress={handleDaftar}
+          disabled={!isFormValid}
+          style={{
+            backgroundColor: isFormValid ? '#82C7C1' : '#E5E7EB',
+            opacity: 1
+          }}
+          className="py-4 rounded-2xl items-center justify-center shadow-sm"
+        >
+          <Text 
+            style={{ color: isFormValid ? '#FFFFFF' : '#9CA3AF' }}
+            className="text-lg font-bold"
+          >
+            Daftar Sekarang
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+  },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 12,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#374151',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F2937',
+  },
+});
 
 export default PendaftaranDonorAsiScreen;

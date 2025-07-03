@@ -1,95 +1,239 @@
 // app/(tabs)/home/certificates/index.tsx
 
 import React from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, Image, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+  ScrollView,
+  Image,
+  StyleSheet,
+} from 'react-native';
 import { useRouter } from 'expo-router';
 
-import icons from '../../../../../constants/icons';
 import images from '../../../../../constants/images';
+import icons from '../../../../../constants/icons';
 
-const certificateData = [
+const certificatesData = [
   {
     id: '1',
     title: 'Volunteer Bakti BCA Indonesia 2025',
     date: '17 September 2025',
+    category: 'Volunteer',
     image: images.sertifikatBCA,
-    description: 'Bakti BCA adalah program Corporate Social Responsibility (CSR) dari BCA yang fokus pada pengembangan masyarakat dan lingkungan. Program ini bertujuan untuk memberikan manfaat bagi masyarakat dan lingkungan, serta mendukung pertumbuhan berkelanjutan Indonesia. Program-program Bakti BCA mencakup pendidikan, lingkungan, kesehatan, dan ekonomi.'
   },
   {
     id: '2',
     title: 'Nova Scotia Health Volunteering 2024',
     date: '6 August 2024',
+    category: 'Health Volunteer',
     image: images.sertifikatHealth,
-    description: 'Apresiasi diberikan atas kontribusi sukarela yang signifikan dalam mendukung layanan kesehatan di Nova Scotia, membantu pasien dan staf dalam berbagai kapasitas.'
   },
   {
     id: '3',
     title: 'Animal Shelter Donation Appreciation',
     date: '12 February 2024',
+    category: 'Donation',
     image: images.sertifikatAnimal,
-    description: 'Sertifikat ini diberikan sebagai tanda terima kasih atas donasi yang murah hati untuk mendukung kesejahteraan dan perawatan hewan-hewan di penampungan kami.'
-  }
+  },
 ];
 
-const styles = StyleSheet.create({
-  headerIcon: { width: 20, height: 20, tintColor: '#4A4A4A' },
-  cardImage: {
-    width: '100%',
-    height: 150, // Sesuaikan tinggi sesuai kebutuhan
-    resizeMode: 'cover',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-  },
-  downloadIcon: { width: 24, height: 24 },
-});
-
-// Komponen Card untuk setiap sertifikat
-const CertificateCard = ({ certificate, onPress }) => (
-  <TouchableOpacity 
-    className="bg-white rounded-xl mb-5 shadow-lg mx-4"
-    onPress={onPress}
-  >
-    <Image source={certificate.image} style={styles.cardImage} />
-    <View className="p-4">
-      <View className="flex-row justify-between items-start">
-        <View className="flex-1 mr-4">
-          <Text className="text-base font-bold text-gray-800">{certificate.title}</Text>
-          <Text className="text-sm text-gray-500 mt-1">{certificate.date}</Text>
-        </View>
-        <TouchableOpacity>
-          <Image source={icons.download} style={styles.downloadIcon} />
-        </TouchableOpacity>
-      </View>
-      <View className="w-full h-1 bg-gray-200 rounded-full mt-4">
-        <View className="w-full h-1 bg-green-500 rounded-full" />
-      </View>
-    </View>
-  </TouchableOpacity>
-);
-
-const CertificateListScreen = () => {
+const CertificatesScreen = () => {
   const router = useRouter();
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
-      <View className="bg-[#A2D5C6] p-4 h-[60px] flex-row items-center shadow-md">
-        <TouchableOpacity onPress={() => router.back()} className="p-1">
-          <Image source={icons.back} style={styles.headerIcon} />
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Image 
+            source={images.back} 
+            style={styles.backIcon} 
+            resizeMode="contain" 
+          />
         </TouchableOpacity>
-        <Text className="text-lg font-bold text-gray-800 ml-4">Sertifikat Aksi & Donasi</Text>
+        <Text style={styles.headerTitle}>Sertifikat & Penghargaan</Text>
+        <View style={{ width: 40 }} />
       </View>
 
-      <ScrollView className="mt-5">
-        {certificateData.map((cert) => (
-          <CertificateCard 
-            key={cert.id} 
-            certificate={cert} 
-            onPress={() => router.push(`/home/profile/certificates/${cert.id}`)} // Navigasi ke detail
-          />
-        ))}
+      {/* Stats Section */}
+      <View style={styles.statsSection}>
+        <View style={styles.statsCard}>
+          <Text style={styles.statsNumber}>{certificatesData.length}</Text>
+          <Text style={styles.statsLabel}>Total Sertifikat</Text>
+        </View>
+      </View>
+
+      <ScrollView style={styles.content}>
+        {certificatesData.length > 0 ? (
+          certificatesData.map((certificate) => (
+            <TouchableOpacity
+              key={certificate.id}
+              style={styles.certificateCard}
+              onPress={() => router.push(`/home/profile/certificates/${certificate.id}`)}
+            >
+              <Image source={certificate.image} style={styles.certificateImage} />
+              <View style={styles.certificateInfo}>
+                <View style={styles.categoryBadge}>
+                  <Text style={styles.categoryText}>{certificate.category}</Text>
+                </View>
+                <Text style={styles.certificateTitle}>{certificate.title}</Text>
+                <Text style={styles.certificateDate}>{certificate.date}</Text>
+              </View>
+              <TouchableOpacity style={styles.downloadButton}>
+                <Image source={icons.download} style={styles.downloadIcon} />
+              </TouchableOpacity>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <View style={styles.emptyState}>
+            <Image source={icons.sertifikat} style={styles.emptyIcon} />
+            <Text style={styles.emptyTitle}>Belum Ada Sertifikat</Text>
+            <Text style={styles.emptyMessage}>
+              Ikuti kegiatan volunteer dan donasi untuk mendapatkan sertifikat
+            </Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default CertificateListScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F8F9FA',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#82BFB7',
+    paddingHorizontal: 16,
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+  backButton: {
+    padding: 8,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    tintColor: 'white',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  statsSection: {
+    padding: 20,
+  },
+  statsCard: {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  statsNumber: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#82BFB7',
+  },
+  statsLabel: {
+    fontSize: 16,
+    color: '#6B7280',
+    marginTop: 5,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  certificateCard: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  certificateImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    resizeMode: 'cover',
+  },
+  certificateInfo: {
+    flex: 1,
+    marginLeft: 15,
+    justifyContent: 'space-between',
+  },
+  categoryBadge: {
+    backgroundColor: '#EDF2F7',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    alignSelf: 'flex-start',
+  },
+  categoryText: {
+    fontSize: 12,
+    color: '#4A5568',
+    fontWeight: '600',
+  },
+  certificateTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1F2937',
+    marginTop: 5,
+  },
+  certificateDate: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginTop: 5,
+  },
+  downloadButton: {
+    padding: 10,
+  },
+  downloadIcon: {
+    width: 24,
+    height: 24,
+  },
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 60,
+  },
+  emptyIcon: {
+    width: 80,
+    height: 80,
+    marginBottom: 20,
+    opacity: 0.5,
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#374151',
+    marginBottom: 10,
+  },
+  emptyMessage: {
+    fontSize: 16,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+});
+
+export default CertificatesScreen;

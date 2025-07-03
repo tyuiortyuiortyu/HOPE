@@ -86,7 +86,7 @@ const MyDonation = () => {
         <TouchableOpacity
           key={item.iddonate || idx}
           activeOpacity={0.85}
-          onPress={() => router.push({ pathname: '/(tabs)/track/(component)/MyDonationCardDetail', params: { ...item }})}
+          onPress={() => router.push({ pathname: '/track/(component)/MyDonationCardDetail', params: { ...item }})}
         >
           <MyDonationCard
             image={item.image}

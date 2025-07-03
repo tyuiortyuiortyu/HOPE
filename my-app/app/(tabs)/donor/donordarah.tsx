@@ -9,7 +9,9 @@ import {
   Dimensions,
   SafeAreaView,
 } from 'react-native';
-import { Link, Stack } from 'expo-router'; // Import Stack
+import { Link, Stack } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import images from '../../../constants/images';
 import icons from '../../../constants/icons';
 
@@ -63,6 +65,7 @@ const BenefitItem = ({ item }) => (
 
 // Halaman Utama Donor Darah
 const DonorDarahScreen = () => {
+  const router = useRouter();
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -78,50 +81,76 @@ const DonorDarahScreen = () => {
   }, [currentIndex]);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <Stack.Screen 
-        options={{
-          headerTransparent: true,
-          headerTitle: "",
-          headerShadowVisible: false,
-        }} 
-      />
+    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+      {/* Header - Updated to match detail page */}
+      <View className="bg-white px-4 py-3">
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingTop: 50,
+          paddingBottom: 20,
+        }}>
+          <TouchableOpacity 
+            style={{
+              padding: 8,
+              marginRight: 12,
+            }}
+            onPress={() => router.back()}
+          >
+            <Image 
+              source={images.back} 
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: '#374151',
+              }}
+              resizeMode="contain" 
+            />
+          </TouchableOpacity>
+          <Text style={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: '#1F2937',
+          }}>Donor Darah</Text>
+        </View>
+      </View>
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Spacer untuk header transparan */}
-        <View className="h-[20px]" /> 
-        
-        {/* --- Bagian Kegiatan Terdekat --- */}
-        <View className="px-5 mb-5">
-          <Text className="text-xl font-bold text-gray-800 mb-4">Ikuti Kegiatan Donor Darah Terdekat</Text>
-          {eventsData.map(item => <EventCard key={item.id} item={item} />)}
-        </View>
+        {/* Content */}
+        <View className="bg-white">
+          {/* --- Bagian Kegiatan Terdekat --- */}
+          <View className="px-5 mb-5">
+            <Text className="text-xl font-bold text-gray-800 mb-4">Ikuti Kegiatan Donor Darah Terdekat</Text>
+            {eventsData.map(item => <EventCard key={item.id} item={item} />)}
+          </View>
 
-        {/* --- Bagian Persiapan Donor Darah --- */}
-        <View className="mb-5">
-          <Text className="text-xl font-bold text-gray-800 mb-4 px-5">Persiapan Donor Darah</Text>
-          <FlatList
-            ref={flatListRef}
-            data={preparationData}
-            renderItem={({ item }) => <PreparationCard item={item} />}
-            keyExtractor={item => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: 20 }} // Padding di dalam FlatList
-            snapToInterval={width * 0.8 + 15}
-            decelerationRate="fast"
-            onScrollToIndexFailed={() => {}}
-          />
-        </View>
+          {/* --- Bagian Persiapan Donor Darah --- */}
+          <View className="mb-5">
+            <Text className="text-xl font-bold text-gray-800 mb-4 px-5">Persiapan Donor Darah</Text>
+            <FlatList
+              ref={flatListRef}
+              data={preparationData}
+              renderItem={({ item }) => <PreparationCard item={item} />}
+              keyExtractor={item => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingHorizontal: 20 }} // Padding di dalam FlatList
+              snapToInterval={width * 0.8 + 15}
+              decelerationRate="fast"
+              onScrollToIndexFailed={() => {}}
+            />
+          </View>
 
-        {/* --- Bagian Manfaat Donor Darah --- */}
-        <View className="px-5 mb-8">
-          <Text className="text-xl font-bold text-gray-800 mb-4">Manfaat Donor Darah</Text>
-          <View className="bg-white p-2">
-            {benefitsData.map(item => <BenefitItem key={item.id} item={item} />)}
+          {/* --- Bagian Manfaat Donor Darah --- */}
+          <View className="px-5 mb-8">
+            <Text className="text-xl font-bold text-gray-800 mb-4">Manfaat Donor Darah</Text>
+            <View className="bg-white p-2">
+              {benefitsData.map(item => <BenefitItem key={item.id} item={item} />)}
+            </View>
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

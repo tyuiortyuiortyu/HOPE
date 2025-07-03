@@ -1,62 +1,78 @@
 // File: app/activity/pendaftaran.tsx
 
-import { View, Text, Image, ScrollView, TouchableOpacity, StatusBar, StyleSheet, TextInput, Alert, SafeAreaView } from 'react-native';
 import React, { useState, useMemo } from 'react';
-import { Feather, Ionicons } from '@expo/vector-icons';
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  StatusBar,
+  StyleSheet,
+  TextInput,
+  Alert,
+  SafeAreaView
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams, Redirect } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import Checkbox from 'expo-checkbox';
-import images from '../../../constants/images'; // Pastikan path ini benar
+import images from '../../../constants/images';
 
 // ============================================
-// KOMPONEN-KOMPONEN KUSTOM (DIADAPTASI)
+// CUSTOM COMPONENTS
 // ============================================
 
-// Komponen untuk input teks biasa
 const FormField = ({ label, placeholder, keyboardType = 'default', value, onChangeText }) => (
-  <View style={{ marginBottom: 16 }}>
-    <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 8, color: '#374151' }}>
-      {label}
-    </Text>
-    <View style={{ width: '100%' }}> {/* Bungkus dengan View */}
-      <TextInput
-        style={{
-          width: '100%', // ✅ wajib
-          backgroundColor: '#F3F4F6',
-          borderRadius: 10,
-          paddingHorizontal: 16,
-          paddingVertical: 12,
-          fontSize: 16,
-          color: '#1F2937',
-          borderWidth: 1,
-          borderColor: '#D1D5DB',
-        }}
-        placeholder={placeholder || `Masukkan ${label}`}
-        placeholderTextColor="#9CA3AF"
-        keyboardType={keyboardType}
-        value={value}
-        onChangeText={onChangeText}
-      />
-    </View>
+  <View className="mb-5">
+    <Text className="text-base font-semibold text-gray-900 mb-3">{label}</Text>
+    <TextInput
+      className="bg-white rounded-xl px-4 py-4 text-base border border-gray-200 shadow-sm"
+      placeholder={placeholder || `Masukkan ${label}`}
+      placeholderTextColor="#9CA3AF"
+      value={value}
+      onChangeText={onChangeText}
+      keyboardType={keyboardType}
+    />
   </View>
 );
 
-// Komponen untuk pilihan seperti Jenis Kelamin dan Status
 const PilihanOpsi = ({ label, options, value, onSelect }) => (
-  <View className="mb-4">
-    <Text className="text-base font-semibold text-black mb-2">{label}</Text>
-    <View className="flex-row space-x-4">
+  <View className="mb-5">
+    <Text className="text-base font-semibold text-gray-900 mb-3">{label}</Text>
+    <View className="flex-row space-x-3">
       {options.map((option) => (
         <TouchableOpacity
           key={option}
           onPress={() => onSelect(option)}
           style={{ backgroundColor: value === option ? '#82C7C1' : '#D9D9D9' }}
           className="px-5 py-3 rounded-[15px] me-3 items-center"
+
+          style={{ 
+            backgroundColor: value === option ? '#82BFB7' : '#FFFFFF',
+            borderColor: value === option ? '#82BFB7' : '#E5E7EB',
+            borderWidth: 1
+          }}
+          className="px-6 py-3 rounded-xl flex-1 items-center shadow-sm"
         >
-          <Text style={{ color: value === option ? '#FFFFFF' : '#000000' }} className="font-semibold">{option}</Text>
+          <Text
+            style={{ color: value === option ? '#FFFFFF' : '#374151' }}
+            className="font-semibold text-sm"
+          >
+            {option}
+          </Text>
         </TouchableOpacity>
       ))}
     </View>
+  </View>
+);
+
+const ActivityInfoItem = ({ icon, text }) => (
+  <View className="flex-row items-center mb-3">
+    <View className="w-6 h-6 rounded-full bg-gray-200 mr-3 items-center justify-center">
+      {icon}
+    </View>
+    <Text className="text-sm text-gray-700 flex-1">{text}</Text>
   </View>
 );
 
@@ -64,7 +80,7 @@ const PendaftaranScreen = () => {
   const router = useRouter();
   const { activityId } = useLocalSearchParams();
 
-  // State terpusat untuk semua data form
+  // Form state
   const [formData, setFormData] = useState({
     nama: '',
     jenisKelamin: '',
@@ -76,15 +92,15 @@ const PendaftaranScreen = () => {
     nomorTelepon: '',
     fotoKTP: null,
   });
+
   const [setujuSK, setSetujuSK] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Handler generik untuk memperbarui state
+  // Handlers
   const handleInputChange = (name, value) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Fungsi untuk memilih gambar KTP
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -92,97 +108,238 @@ const PendaftaranScreen = () => {
       aspect: [16, 9],
       quality: 0.5,
     });
+    
     if (!result.canceled) {
       handleInputChange('fotoKTP', result.assets[0].uri);
     }
   };
 
-  // Validasi form menggunakan useMemo
+  // Form validation
   const isFormValid = useMemo(() => {
-    const requiredFields = ['nama', 'jenisKelamin', 'nik', 'alamat', 'domisili', 'status', 'pendidikan', 'nomorTelepon'];
+    const requiredFields = [
+      'nama', 'jenisKelamin', 'nik', 'alamat', 
+      'domisili', 'status', 'pendidikan', 'nomorTelepon'
+    ];
     const allFieldsFilled = requiredFields.every(field => formData[field]?.trim());
     return allFieldsFilled && formData.fotoKTP && setujuSK;
   }, [formData, setujuSK]);
-  
+
   const handleDaftar = () => {
     if (!isFormValid) {
-      Alert.alert("Form Tidak Lengkap", "Harap isi semua data, unggah KTP, dan setujui S&K.");
+      Alert.alert(
+        "Form Tidak Lengkap",
+        "Harap isi semua data, unggah KTP, dan setujui S&K."
+      );
       return;
     }
-    // Jika valid, tampilkan layar sukses
     setIsSubmitted(true);
   };
 
-  // Redirect jika tidak ada ID
-  if (!activityId) return <Redirect href="/volunteer/listvolunteer" />;
+  // Redirect if no activity ID
+  if (!activityId) {
+    return <Redirect href="/volunteer/listvolunteer" />;
+  }
 
-  // Layar Sukses
+  // Success screen
   if (isSubmitted) {
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+        
+        {/* Header - Updated to match detail page */}
+        <View className="bg-white px-4 py-3">
+          <View style={styles.headerTop}>
+            <TouchableOpacity 
+              style={styles.backButton}
+              onPress={() => router.replace('/volunteer/listvolunteer')}
+            >
+              <Image 
+                source={images.back} 
+                style={styles.backIcon} 
+                resizeMode="contain" 
+              />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Pendaftaran Berhasil</Text>
+          </View>
+        </View>
+
         <View className="flex-1 items-center justify-center p-8">
-          <Ionicons name="checkmark-circle" size={80} color="#10B981" className="mb-4" />
-          <Text className="text-2xl font-bold text-center mb-2">Pendaftaran Berhasil!</Text>
-          <Text className="text-base text-gray-600 text-center mb-6">Terima kasih telah mendaftar. Informasi selanjutnya akan kami kirimkan melalui nomor telepon Anda.</Text>
-          <TouchableOpacity onPress={() => router.replace('/volunteer/listvolunteer')} className="bg-black py-3 px-8 rounded-full">
-            <Text className="text-white font-bold text-base">Kembali ke Daftar Volunteer</Text>
+          <Image source={images.done} className="w-20 h-20 mb-4" resizeMode="contain" />
+          <Text className="text-2xl font-bold text-center mb-2">
+            Pendaftaran Berhasil!
+          </Text>
+          <Text className="text-base text-gray-600 text-center mb-6">
+            Terima kasih telah mendaftar. Informasi selanjutnya akan kami kirimkan 
+            melalui nomor telepon Anda.
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.replace('/volunteer/listvolunteer')}
+            style={{ backgroundColor: '#82BFB7' }}
+            className="py-3 px-8 rounded-full"
+          >
+            <Text className="text-white font-bold text-base">
+              Kembali ke Daftar Volunteer
+            </Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
-  // Layar Form
+  // Main form screen
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        
-        <View className="relative">
-          <Image source={images.volunteer1} className="w-full h-56 rounded-b-[30px]" resizeMode="cover"/>
-          <TouchableOpacity className="absolute top-14 left-5 bg-white p-2 rounded-full" style={styles.shadow} onPress={() => router.back()}>
-            <Feather name="arrow-left" size={24} color="black" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFF6F6" />
+      
+      {/* Header - Updated to match detail page */}
+      <View className="bg-white px-4 py-3">
+        <View style={styles.headerTop}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Image 
+              source={images.back} 
+              style={styles.backIcon} 
+              resizeMode="contain" 
+            />
           </TouchableOpacity>
+          <Text style={styles.headerTitle}>Pendaftaran Volunteer</Text>
+        </View>
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+        {/* Hero Image */}
+        <View className="relative">
+          <Image
+            source={images.volunteer1}
+            className="w-full h-64"
+            resizeMode="cover"
+          />
+          <View className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 to-transparent h-20" />
         </View>
 
-        <View className="p-5">
-          <View className="mt-2 space-y-2">
-            <View className="flex-row items-center"><View className="w-5 h-5 rounded-full border-2 border-gray-400 mr-3" /><Text className="text-base text-gray-700">Sentul, Bogor</Text></View>
-            <View className="flex-row items-center"><View className="w-5 h-5 rounded-full border-2 border-gray-400 mr-3" /><Text className="text-base text-gray-700">12 Mei 2025</Text></View>
-            <View className="flex-row items-center mt-2"><View className="w-8 h-8 rounded-full bg-gray-300 mr-3" /><Text className="text-base text-gray-700">Diselenggarakan oleh Hope</Text></View>
+        {/* Content */}
+        <View className="px-5 py-6 bg-white -mt-6 mx-4 rounded-t-3xl shadow-lg">
+          {/* Activity Details */}
+          <View className="mb-6">
+            <Text className="text-xl font-bold text-gray-900 mb-4">
+              Kegiatan Volunteer
+            </Text>
+            <ActivityInfoItem 
+              icon={<Image source={images.location} className="w-3 h-3" resizeMode="contain" />}
+              text="Sentul, Bogor"
+            />
+            <ActivityInfoItem 
+              icon={<Image source={images.date} className="w-3 h-3" resizeMode="contain" />}
+              text="12 Mei 2025"
+            />
+            <ActivityInfoItem 
+              icon={<Image source={images.user} className="w-3 h-3" resizeMode="contain" />}
+              text="Diselenggarakan oleh Hope"
+            />
           </View>
 
-          <View className="border-b border-gray-200 my-5" />
+          <View className="border-b border-gray-100 mb-6" />
 
+          {/* Form */}
           <View>
-            <Text className="text-xl font-bold text-black mb-4">Form Pendaftaran</Text>
+            <Text className="text-xl font-bold text-gray-900 mb-6">
+              Informasi Pribadi
+            </Text>
             
-            <FormField label="Nama" value={formData.nama} onChangeText={(val) => handleInputChange('nama', val)} />
-            <PilihanOpsi label="Jenis Kelamin" options={['Laki-laki', 'Perempuan']} value={formData.jenisKelamin} onSelect={(val) => handleInputChange('jenisKelamin', val)} />
-            <FormField label="NIK" value={formData.nik} onChangeText={(val) => handleInputChange('nik', val)} keyboardType="numeric" />
-            <FormField label="Alamat" value={formData.alamat} onChangeText={(val) => handleInputChange('alamat', val)} />
-            <FormField label="Domisili" value={formData.domisili} onChangeText={(val) => handleInputChange('domisili', val)} />
-            <PilihanOpsi label="Status" options={['Single', 'Married']} value={formData.status} onSelect={(val) => handleInputChange('status', val)} />
-            <FormField label="Pendidikan" value={formData.pendidikan} onChangeText={(val) => handleInputChange('pendidikan', val)} />
-            <FormField label="Nomor Telepon" value={formData.nomorTelepon} onChangeText={(val) => handleInputChange('nomorTelepon', val)} keyboardType="phone-pad" />
+            <FormField
+              label="Nama Lengkap"
+              value={formData.nama}
+              onChangeText={(val) => handleInputChange('nama', val)}
+            />
             
+            <PilihanOpsi
+              label="Jenis Kelamin"
+              options={['Laki-laki', 'Perempuan']}
+              value={formData.jenisKelamin}
+              onSelect={(val) => handleInputChange('jenisKelamin', val)}
+            />
+            
+            <FormField
+              label="NIK"
+              value={formData.nik}
+              onChangeText={(val) => handleInputChange('nik', val)}
+              keyboardType="numeric"
+            />
+            
+            <FormField
+              label="Alamat Lengkap"
+              value={formData.alamat}
+              onChangeText={(val) => handleInputChange('alamat', val)}
+            />
+            
+            <FormField
+              label="Domisili"
+              value={formData.domisili}
+              onChangeText={(val) => handleInputChange('domisili', val)}
+            />
+            
+            <PilihanOpsi
+              label="Status Pernikahan"
+              options={['Single', 'Married']}
+              value={formData.status}
+              onSelect={(val) => handleInputChange('status', val)}
+            />
+            
+            <FormField
+              label="Pendidikan Terakhir"
+              value={formData.pendidikan}
+              onChangeText={(val) => handleInputChange('pendidikan', val)}
+            />
+            
+            <FormField
+              label="Nomor Telepon"
+              value={formData.nomorTelepon}
+              onChangeText={(val) => handleInputChange('nomorTelepon', val)}
+              keyboardType="phone-pad"
+            />
+            
+            {/* KTP Upload */}
             <View className="mb-6">
-              <Text className="text-base font-semibold text-black mb-2">Upload Foto KTP</Text>
-              <TouchableOpacity onPress={pickImage} className="bg-gray-100 rounded-2xl h-40 items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden">
+              <Text className="text-base font-semibold text-gray-900 mb-3">
+                Upload Foto KTP
+              </Text>
+              <TouchableOpacity
+                onPress={pickImage}
+                className="bg-gray-50 rounded-2xl h-48 items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden"
+              >
                 {formData.fotoKTP ? (
-                  <Image source={{ uri: formData.fotoKTP }} className="w-full h-full" resizeMode="cover" />
+                  <Image
+                    source={{ uri: formData.fotoKTP }}
+                    className="w-full h-full rounded-2xl"
+                    resizeMode="cover"
+                  />
                 ) : (
                   <View className="items-center">
-                    <Ionicons name="camera-outline" size={40} color="#9CA3AF" />
-                    <Text className="text-gray-500 mt-2">Ketuk untuk mengunggah KTP</Text>
+                    <View className="w-16 h-16 rounded-full bg-gray-200 items-center justify-center mb-3">
+                      <Ionicons name="camera-outline" size={24} color="#9CA3AF" />
+                    </View>
+                    <Text className="text-gray-500 font-medium">Ketuk untuk mengunggah KTP</Text>
+                    <Text className="text-gray-400 text-sm mt-1">JPG, PNG maksimal 5MB</Text>
                   </View>
                 )}
               </TouchableOpacity>
             </View>
 
-            <View className="flex-row items-center mb-6">
-              <Checkbox value={setujuSK} onValueChange={setSetujuSK} color={setujuSK ? 'black' : undefined} style={{width: 24, height: 24, marginRight: 12}}/>
-              <Text className="text-base text-gray-700 flex-1">Saya memahami dan menerima Syarat & Ketentuan yang berlaku.</Text>
+            {/* Terms and Conditions */}
+            <View className="flex-row items-start mb-8 p-4 bg-gray-50 rounded-xl">
+              <Checkbox
+                value={setujuSK}
+                onValueChange={setSetujuSK}
+                color={setujuSK ? '#82BFB7' : undefined}
+                style={{ width: 20, height: 20, marginRight: 12, marginTop: 2 }}
+              />
+              <Text className="text-sm text-gray-700 flex-1 leading-5">
+                Saya memahami dan menerima{' '}
+                <Text className="font-semibold text-black">Syarat & Ketentuan</Text>
+                {' '}yang berlaku serta bersedia mengikuti seluruh rangkaian kegiatan volunteer.
+              </Text>
             </View>
           </View>
         </View>
@@ -194,8 +351,23 @@ const PendaftaranScreen = () => {
           disabled={!isFormValid}
           style={{ backgroundColor: '#82C7C1', opacity: isFormValid ? 1 : 0.5 }}
           className="bg-[#82C7C1] py-3  rounded-full items-center justify-center "
+      {/* Submit Button */}
+      <View className="px-5 py-4 bg-white border-t border-gray-100 shadow-lg">
+        <TouchableOpacity
+          onPress={handleDaftar}
+          disabled={!isFormValid}
+          style={{
+            backgroundColor: isFormValid ? '#82BFB7' : '#E5E7EB',
+            opacity: 1
+          }}
+          className="py-4 rounded-2xl items-center justify-center shadow-sm"
         >
-          <Text className="text-white text-lg font-bold">Daftar</Text>
+          <Text 
+            style={{ color: isFormValid ? '#FFFFFF' : '#9CA3AF' }}
+            className="text-lg font-bold"
+          >
+            Daftar Sekarang
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -206,6 +378,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 12,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#374151',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F2937',
   },
   shadow: {
     shadowColor: "#000",

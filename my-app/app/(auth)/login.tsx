@@ -8,21 +8,22 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
+  Image,
+  StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { Image } from "react-native";
 import images from "../../constants/images";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleLogin = () => {
-    if (!email || !password) {
-      Alert.alert("Validation", "Please fill in both email and password");
+    if (!phoneNumber || !password) {
+      Alert.alert("Validation", "Please fill in both phone number and password");
       return;
     }
     Alert.alert("Login Success", "You are logged in!");
@@ -30,131 +31,219 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <KeyboardAvoidingView
-        className="flex-1"
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        {/* Header */}
-        <View className="flex-row items-center justify-between px-6 py-4">
-          <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#1F2937" />
+    <View style={styles.container}>
+      <View style={styles.topSection}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <Ionicons name="arrow-back" size={24} color="#000" />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.content}>
+        <Text style={styles.title}>Login</Text>
+        
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.subtitle}>Don't have an account? </Text>
+          <TouchableOpacity onPress={() => router.push("register")}>
+            <Text style={styles.linkText}>sign up</Text>
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-gray-900">Masuk</Text>
-          <View className="w-6" />
         </View>
 
-        <View className="flex-1 px-6">
-          {/* Welcome Text */}
-          <View className="mb-8 mt-4">
-            <Text className="text-2xl font-bold text-gray-900 mb-2">
-              Selamat datang kembali
-            </Text>
-            <Text className="text-gray-600 text-base">
-              Masuk ke akun Anda untuk melanjutkan berbagi kebaikan
-            </Text>
-          </View>
-
-          {/* Form */}
-          <View className="space-y-4">
-            {/* Email Input */}
-            <View>
-              <Text className="text-sm font-medium text-gray-700 mb-2">
-                Email atau Username
-              </Text>
+        <View style={styles.form}>
+          {/* Phone Number Input */}
+          <View style={styles.inputContainer}>
+            <View style={styles.phoneInputWrapper}>
+              <Text style={styles.countryCode}>+62</Text>
               <TextInput
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-base focus:border-blue-500"
-                placeholder="Masukkan email atau username"
+                style={styles.phoneInput}
+                placeholder=""
                 placeholderTextColor="#9CA3AF"
-                value={email}
-                onChangeText={setEmail}
-                autoCapitalize="none"
-                keyboardType="email-address"
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                keyboardType="phone-pad"
               />
             </View>
+          </View>
 
-            {/* Password Input */}
-            <View>
-              <Text className="text-sm font-medium text-gray-700 mb-2">
-                Password
-              </Text>
-              <View className="relative">
-                <TextInput
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 pr-12 text-base focus:border-blue-500"
-                  placeholder="Masukkan password"
-                  placeholderTextColor="#9CA3AF"
-                  value={password}
-                  secureTextEntry={!showPassword}
-                  onChangeText={setPassword}
-                />
-                <TouchableOpacity
-                  className="absolute right-4 top-4"
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  <Ionicons
-                    name={showPassword ? "eye-outline" : "eye-off-outline"}
-                    size={20}
-                    color="#6B7280"
-                  />
-                </TouchableOpacity>
-              </View>
+          {/* Password Input */}
+          <View style={styles.inputContainer}>
+            <View style={styles.passwordWrapper}>
+              <Ionicons name="lock-closed-outline" size={20} color="#9CA3AF" style={styles.lockIcon} />
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Password"
+                placeholderTextColor="#9CA3AF"
+                value={password}
+                secureTextEntry={!showPassword}
+                onChangeText={setPassword}
+              />
+              <TouchableOpacity
+                style={styles.eyeIcon}
+                onPress={() => router.push("forgot-password")}
+              >
+                <Text style={styles.forgotText}>FORGOT</Text>
+              </TouchableOpacity>
             </View>
-
-            {/* Forgot Password */}
-            <TouchableOpacity
-              className="self-end"
-              onPress={() => router.push("forgot-password")}
-            >
-              <Text className="text-sm text-blue-600 font-medium">
-                Lupa password?
-              </Text>
-            </TouchableOpacity>
           </View>
 
           {/* Login Button */}
           <TouchableOpacity
-            className="w-full rounded-xl py-4 mt-8"
-            style={{ backgroundColor: "#82BFB7" }}
+            style={styles.loginButton}
             onPress={handleLogin}
           >
-            <Text className="text-white text-base font-semibold text-center">
-              Masuk
-            </Text>
+            <Text style={styles.loginButtonText}>Login</Text>
+            <Ionicons name="arrow-forward" size={20} color="white" />
           </TouchableOpacity>
-
-          {/* Divider */}
-          <View className="flex-row items-center my-8">
-            <View className="flex-1 h-px bg-gray-200" />
-            <Text className="px-4 text-sm text-gray-500">atau masuk dengan</Text>
-            <View className="flex-1 h-px bg-gray-200" />
-          </View>
-
-          {/* Social Login */}
-          <View className="flex-row justify-center space-x-4 mb-6">
-            <TouchableOpacity className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center">
-              <Image source={images.google} className="w-6 h-6" />
-            </TouchableOpacity>
-            <TouchableOpacity className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center">
-              <Image source={images.facebook} className="w-6 h-6" />
-            </TouchableOpacity>
-            <TouchableOpacity className="w-12 h-12 rounded-full bg-gray-100 items-center justify-center">
-              <Image source={images.apple} className="w-6 h-6" />
-            </TouchableOpacity>
-          </View>
-
-          {/* Register Link */}
-          <View className="flex-row justify-center items-center">
-            <Text className="text-gray-600">Belum punya akun? </Text>
-            <TouchableOpacity onPress={() => router.push("register")}>
-              <Text style={{ color: "#82BFB7" }} className="font-medium">
-                Daftar sekarang
-              </Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+
+        {/* Social Login */}
+        <View style={styles.socialContainer}>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image source={images.apple} style={styles.socialIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image source={images.facebook} style={styles.socialIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image source={images.google} style={styles.socialIcon} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.socialButton}>
+            <Image source={images.twitter} style={styles.socialIcon} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FED3DD',
+  },
+  topSection: {
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
+    flex: 1,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingHorizontal: 24,
+    paddingTop: 40,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#000',
+    marginBottom: 8,
+  },
+  subtitleContainer: {
+    flexDirection: 'row',
+    marginBottom: 40,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#666',
+  },
+  linkText: {
+    fontSize: 14,
+    color: '#82BFB7',
+    fontWeight: '500',
+  },
+  form: {
+    marginBottom: 40,
+  },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  phoneInputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    height: 50,
+  },
+  countryCode: {
+    fontSize: 16,
+    color: '#000',
+    marginRight: 10,
+  },
+  phoneInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000',
+  },
+  passwordWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    height: 50,
+  },
+  lockIcon: {
+    marginRight: 10,
+  },
+  passwordInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000',
+  },
+  eyeIcon: {
+    padding: 5,
+  },
+  forgotText: {
+    fontSize: 12,
+    color: '#82BFB7',
+    fontWeight: '600',
+  },
+  loginButton: {
+    backgroundColor: '#82BFB7',
+    borderRadius: 25,
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  loginButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    marginRight: 8,
+  },
+  socialContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 20,
+    marginTop: 20,
+  },
+  socialButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#F5F5F5',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  socialIcon: {
+    width: 24,
+    height: 24,
+  },
+});
 
 export default Login;
