@@ -48,6 +48,7 @@ import location from "../assets/images/volunteer/location.png";
 import date from "../assets/images/volunteer/date.png";
 
 import done from "../assets/images/donate/done.png";
+import donate2 from "../assets/images/donate2.png";
 
 export default { 
     logo,
@@ -105,4 +106,5 @@ export default {
     date,
 
     done,
+    donate2,
 }
