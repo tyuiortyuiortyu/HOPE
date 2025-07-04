@@ -75,7 +75,7 @@ const MyDonationCard = ({
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: '#f0f9f8',
     borderRadius: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: IMAGE_WIDTH,
-    height: IMAGE_HEIGHT,
+    height: '100%',
     borderTopLeftRadius: 16,
     borderBottomLeftRadius: 16,
   },

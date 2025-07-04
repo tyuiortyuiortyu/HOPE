@@ -29,10 +29,19 @@ const MyDonationCardDetail = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
-            <ScrollView contentContainerStyle={{ paddingBottom: 32, paddingTop: 15 }}>
-                <View style={{ alignItems: 'center', marginTop: 8, padding: 2 }}>
-                    <Text style={styles.headerTitle}>Terima Kasih!</Text>
-                    <Text style={styles.subtitle}>Donasimu telah diterima dan akan segera disalurkan!!</Text>
+            {/* Header */}
+
+            <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
+                {/* Success Message */}
+                <View style={styles.successSection}>
+                    <View style={styles.successIcon}>
+                        <Image 
+                            source={require('../../../../assets/images/donate/done.png')} 
+                            style={styles.successIconImage}
+                        />
+                    </View>
+                    <Text style={styles.successTitle}>Terima Kasih!</Text>
+                    <Text style={styles.successSubtitle}>Donasimu telah diterima dan akan segera disalurkan</Text>
                 </View>
                 {/* Info Card */}
                 <View style={styles.infoCard}>
@@ -75,7 +84,7 @@ const MyDonationCardDetail = () => {
                             </View>
                             <View style={styles.amountRow}>
                                 <Text style={styles.amountText}>
-                                    {formatRupiah(collected)} / {formatRupiah(target)} <Text style={{ fontWeight: 'bold' }}>Terkumpul</Text>
+                                    {formatRupiah(collected)} / {formatRupiah(target)}
                                 </Text>
                             </View>
                             <TouchableOpacity style={styles.donateAgainBtn}>
@@ -173,10 +182,9 @@ const styles = StyleSheet.create({
         padding: 0,
     },
     image: {
-        width: 110,
-        height: 110,
-        borderTopLeftRadius: 16,
-        borderBottomLeftRadius: 16,
+        width: 120,
+        height: '100%',
+        minHeight: 120,
     },
     cardContent: {
         flex: 1,

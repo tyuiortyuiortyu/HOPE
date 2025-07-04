@@ -7,9 +7,11 @@ const TrackLayout = () => {
         <Stack
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: '#82BFB7', // Warna teal header
+                    backgroundColor: '#fff', // Warna teal header
+                    
                 },
-                headerTintColor: '#fff', // Warna teks dan panah kembali
+                title: 'Kembali', // Judul header
+                headerTintColor: '#000', // Warna teks dan panah kembali
                 headerTitleStyle: { 
                     fontWeight: 'bold',
                 },
@@ -18,7 +20,13 @@ const TrackLayout = () => {
             <Stack.Screen
                 name="index"
                 options={{
-                    title: "Jurnal Harapanku",
+                    headerShown: false, // Hide header since index has Sobat Baik header
+                }}
+            />
+            <Stack.Screen
+                name="(component)/MyDonationCardDetail"
+                options={{
+                    title: "back",
                     headerShown: true,
                     headerBackTitle: "Back",
                 }}

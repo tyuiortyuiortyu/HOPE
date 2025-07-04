@@ -72,8 +72,53 @@ const MyActionCardDetail = () => {
 }
 
 const styles = StyleSheet.create({
-  headerTitle: {
-    fontSize: 32,
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 50,
+    paddingBottom: 16,
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e5e5',
+  },
+  backBtn: {
+    padding: 8,
+    width: 40,
+    alignItems: 'center',
+  },
+  backBtnText: {
+    fontSize: 24,
+    color: '#82c3be',
+    fontWeight: 'bold',
+  },
+  scrollContainer: {
+    paddingBottom: 32,
+  },
+  successSection: {
+    alignItems: 'center',
+    paddingVertical: 32,
+    paddingHorizontal: 16,
+  },
+  successIcon: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  successIconImage: {
+    width: 40,
+    height: 40,
+  },
+  successTitle: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#222',
     marginBottom: 8,
