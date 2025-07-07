@@ -49,6 +49,8 @@ import date from "../assets/images/volunteer/date.png";
 
 import done from "../assets/images/donate/done.png";
 import donate2 from "../assets/images/donate2.png";
+import donate_prog from "../assets/images/donate/progress-thin-new.png";
+import donate_prof from "../assets/images/donate3.png";
 
 export default { 
     logo,
@@ -107,4 +109,6 @@ export default {
 
     done,
     donate2,
+    donate_prog,
+    donate_prof,
 }

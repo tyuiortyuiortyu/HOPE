@@ -46,8 +46,8 @@ const dummyDonationData = [
   },
   {
     id: 4,
-    title: "Renovasi Fasilitas Kesehatan Desa",
-    description: "Renovasi fasilitas kesehatan desa",
+    title: "Bantu Gawr Gura Kembali Streaming",
+    description: "Gawr Gura pensiun, bantu dia kembali streaming!",
     targetAmount: "2.500.000",
     currentAmount: "1.000.000",
     progress: 40,
@@ -88,8 +88,28 @@ const dummyDonationData = [
 
 // Donation Card Component
 const DonationCard = ({ data }: { data: any }) => {
+  const router = useRouter();
+  
+  const handleCardPress = () => {
+    router.push({
+      pathname: '/donate/detail',
+      params: {
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        targetAmount: data.targetAmount,
+        currentAmount: data.currentAmount,
+        progress: data.progress,
+        daysLeft: data.daysLeft,
+      },
+    });
+  };
+
   return (
-    <View className="bg-white rounded-xl overflow-hidden shadow-lg mb-4">
+    <TouchableOpacity 
+      className="bg-white rounded-xl overflow-hidden shadow-lg mb-4"
+      onPress={handleCardPress}
+    >
       <View className="flex-row h-28">
         {/* Card Image - Left side */}
         <View className="w-24 h-28 overflow-hidden rounded-l-xl">
@@ -129,7 +149,7 @@ const DonationCard = ({ data }: { data: any }) => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
