@@ -52,6 +52,13 @@ import donate2 from "../assets/images/donate2.png";
 import donate_prog from "../assets/images/donate/progress-thin-new.png";
 import donate_prof from "../assets/images/donate3.png";
 
+// Payment method images
+import mastercard from "../assets/images/mastercard.png";
+import visa from "../assets/images/visa.png";
+import kredivo from "../assets/images/kredivo.png";
+import gopay from "../assets/images/gopay.png";
+import flazz from "../assets/images/flazz.png";
+
 export default { 
     logo,
     apple,
@@ -111,4 +118,11 @@ export default {
     donate2,
     donate_prog,
     donate_prof,
+
+    // Payment methods
+    mastercard,
+    visa,
+    kredivo,
+    gopay,
+    flazz,
 }

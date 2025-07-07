@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   Dimensions,
   StatusBar, 
-  StyleSheet
+  StyleSheet,
+  Modal,
 } from 'react-native';
 import { useRouter, useLocalSearchParams, Redirect } from 'expo-router';
 import images from '../../../constants/images';
@@ -18,6 +19,7 @@ const { width } = Dimensions.get('window');
 const DonationDetailScreen = () => {
   const router = useRouter();
   const params = useLocalSearchParams();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   
   // Parse the donation data from params
   const donationData = {
@@ -29,6 +31,13 @@ const DonationDetailScreen = () => {
     progress: parseInt(params.progress as string),
     daysLeft: params.daysLeft as string,
   };
+
+  // Check if we should show success modal
+  useEffect(() => {
+    if (params.showSuccess === 'true') {
+      setShowSuccessModal(true);
+    }
+  }, [params.showSuccess]);
 
 
   const progressPercentage = donationData.progress;
@@ -84,7 +93,7 @@ const DonationDetailScreen = () => {
 
         {/* Foundation Info */}
         <View className="px-6 mb-6">
-          <View className="flex-row items-center px-3 py-2 rounded-xl bg-white border border-neutral-100 shadow-md">
+          <View className="flex-row items-center px-3 py-2 rounded-xl bg-white border border-neutral-100 shadow-lg">
             <View className="w-14 h-14 bg-blue-600 rounded-xl items-center justify-center mr-4">
               <Image 
                   source={images.donate_prof}
@@ -104,8 +113,14 @@ const DonationDetailScreen = () => {
           <TouchableOpacity 
             className="bg-[#82BFB7] rounded-xl py-4 items-center shadow-lg"
             onPress={() => {
-              // Handle donation logic here
-              console.log('Donate button pressed');
+              router.push({
+                pathname: '/donate/payment',
+                params: {
+                  title: donationData.title,
+                  targetAmount: donationData.targetAmount,
+                  currentAmount: donationData.currentAmount,
+                },
+              });
             }}
           >
             <Text className="text-white text-lg font-semibold">Sumbang!</Text>
@@ -123,6 +138,45 @@ const DonationDetailScreen = () => {
           </Text>
         </View>
       </ScrollView>
+
+      {/* Success Modal */}
+      <Modal
+        visible={showSuccessModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowSuccessModal(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black/50">
+          <View className="bg-white rounded-2xl py-4 px-4 mx-8 items-center shadow-2xl">
+            {/* Success Text */}
+            <Text className="text-3xl font-bold text-[#82BFB7] mb-2 text-center">
+              Donasi Sukses!
+            </Text>
+
+            {/* Success Icon */}
+            <View className="w-20 h-20 mb-2">
+              <Image 
+                source={images.done} 
+                className="w-full h-full"
+                resizeMode="contain"
+              />
+            </View>
+
+            {/* Close Button */}
+            <TouchableOpacity
+              className="bg-[#82BFB7] px-32 py-3 rounded-lg mt-4"
+              onPress={() => {
+                setShowSuccessModal(false);
+                router.push('/(tabs)/donate/');
+              }}
+            >
+              <Text className="text-white font-semibold text-lg">
+                Selesai
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
