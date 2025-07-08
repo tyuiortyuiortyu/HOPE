@@ -28,9 +28,8 @@ const MyDonationCardDetail = () => {
     }: any = params
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#f8f9fa' }}>
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
             {/* Header */}
-
             <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
                 {/* Success Message */}
                 <View style={styles.successSection}>
@@ -88,9 +87,9 @@ const MyDonationCardDetail = () => {
                             <View style={styles.amountRow}>
                                 <Text style={styles.amountText}>
                                     {formatRupiah(collected)} / {formatRupiah(target)}
-                                </Text>
+<!--                                 </Text>
                                 <Text style={styles.percentageText}>
-                                    {Math.round((collected / target) * 100)}%
+                                    {Math.round((collected / target) * 100)}% -->
                                 </Text>
                             </View>
                         </View>
@@ -247,7 +246,8 @@ const styles = StyleSheet.create({
     },
     image: {
         width: 120,
-        height: 120,
+        height: '100%',
+        minHeight: 120,
     },
     cardContent: {
         flex: 1,

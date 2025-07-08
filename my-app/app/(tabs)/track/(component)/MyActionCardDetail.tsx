@@ -130,11 +130,11 @@ const styles = StyleSheet.create({
     color: '#82c3be',
     fontWeight: 'bold',
   },
-  headerTitle: {
+<!--   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#1a1a1a',
-  },
+  }, -->
   scrollContainer: {
     paddingBottom: 32,
   },
