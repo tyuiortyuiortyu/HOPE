@@ -45,13 +45,10 @@ const PilihanOpsi = ({ label, options, value, onSelect }) => (
         <TouchableOpacity
           key={option}
           onPress={() => onSelect(option)}
-          style={{ backgroundColor: value === option ? '#82C7C1' : '#D9D9D9' }}
-          className="px-5 py-3 rounded-[15px] me-3 items-center"
-
-          style={{ 
+          style={{
             backgroundColor: value === option ? '#82BFB7' : '#FFFFFF',
             borderColor: value === option ? '#82BFB7' : '#E5E7EB',
-            borderWidth: 1
+            borderWidth: 1,
           }}
           className="px-6 py-3 rounded-xl flex-1 items-center shadow-sm"
         >
@@ -80,7 +77,6 @@ const PendaftaranScreen = () => {
   const router = useRouter();
   const { activityId } = useLocalSearchParams();
 
-  // Form state
   const [formData, setFormData] = useState({
     nama: '',
     jenisKelamin: '',
@@ -96,7 +92,6 @@ const PendaftaranScreen = () => {
   const [setujuSK, setSetujuSK] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Handlers
   const handleInputChange = (name, value) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
@@ -108,16 +103,15 @@ const PendaftaranScreen = () => {
       aspect: [16, 9],
       quality: 0.5,
     });
-    
+
     if (!result.canceled) {
       handleInputChange('fotoKTP', result.assets[0].uri);
     }
   };
 
-  // Form validation
   const isFormValid = useMemo(() => {
     const requiredFields = [
-      'nama', 'jenisKelamin', 'nik', 'alamat', 
+      'nama', 'jenisKelamin', 'nik', 'alamat',
       'domisili', 'status', 'pendidikan', 'nomorTelepon'
     ];
     const allFieldsFilled = requiredFields.every(field => formData[field]?.trim());
@@ -126,38 +120,27 @@ const PendaftaranScreen = () => {
 
   const handleDaftar = () => {
     if (!isFormValid) {
-      Alert.alert(
-        "Form Tidak Lengkap",
-        "Harap isi semua data, unggah KTP, dan setujui S&K."
-      );
+      Alert.alert("Form Tidak Lengkap", "Harap isi semua data, unggah KTP, dan setujui S&K.");
       return;
     }
     setIsSubmitted(true);
   };
 
-  // Redirect if no activity ID
   if (!activityId) {
     return <Redirect href="/volunteer/listvolunteer" />;
   }
 
-  // Success screen
   if (isSubmitted) {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
-        
-        {/* Header - Updated to match detail page */}
         <View className="bg-white px-4 py-3">
           <View style={styles.headerTop}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.backButton}
               onPress={() => router.replace('/volunteer/listvolunteer')}
             >
-              <Image 
-                source={images.back} 
-                style={styles.backIcon} 
-                resizeMode="contain" 
-              />
+              <Image source={images.back} style={styles.backIcon} resizeMode="contain" />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Pendaftaran Berhasil</Text>
           </View>
@@ -169,7 +152,7 @@ const PendaftaranScreen = () => {
             Pendaftaran Berhasil!
           </Text>
           <Text className="text-base text-gray-600 text-center mb-6">
-            Terima kasih telah mendaftar. Informasi selanjutnya akan kami kirimkan 
+            Terima kasih telah mendaftar. Informasi selanjutnya akan kami kirimkan
             melalui nomor telepon Anda.
           </Text>
           <TouchableOpacity
@@ -186,55 +169,39 @@ const PendaftaranScreen = () => {
     );
   }
 
-  // Main form screen
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF6F6" />
-      
-      {/* Header - Updated to match detail page */}
       <View className="bg-white px-4 py-3">
         <View style={styles.headerTop}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.backButton}
             onPress={() => router.back()}
           >
-            <Image 
-              source={images.back} 
-              style={styles.backIcon} 
-              resizeMode="contain" 
-            />
+            <Image source={images.back} style={styles.backIcon} resizeMode="contain" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Pendaftaran Volunteer</Text>
         </View>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
-        {/* Hero Image */}
         <View className="relative">
-          <Image
-            source={images.volunteer1}
-            className="w-full h-64"
-            resizeMode="cover"
-          />
+          <Image source={images.volunteer1} className="w-full h-64" resizeMode="cover" />
           <View className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 to-transparent h-20" />
         </View>
 
-        {/* Content */}
         <View className="px-5 py-6 bg-white -mt-6 mx-4 rounded-t-3xl shadow-lg">
-          {/* Activity Details */}
           <View className="mb-6">
-            <Text className="text-xl font-bold text-gray-900 mb-4">
-              Kegiatan Volunteer
-            </Text>
-            <ActivityInfoItem 
+            <Text className="text-xl font-bold text-gray-900 mb-4">Kegiatan Volunteer</Text>
+            <ActivityInfoItem
               icon={<Image source={images.location} className="w-3 h-3" resizeMode="contain" />}
               text="Sentul, Bogor"
             />
-            <ActivityInfoItem 
+            <ActivityInfoItem
               icon={<Image source={images.date} className="w-3 h-3" resizeMode="contain" />}
               text="12 Mei 2025"
             />
-            <ActivityInfoItem 
+            <ActivityInfoItem
               icon={<Image source={images.user} className="w-3 h-3" resizeMode="contain" />}
               text="Diselenggarakan oleh Hope"
             />
@@ -242,130 +209,63 @@ const PendaftaranScreen = () => {
 
           <View className="border-b border-gray-100 mb-6" />
 
-          {/* Form */}
-          <View>
-            <Text className="text-xl font-bold text-gray-900 mb-6">
-              Informasi Pribadi
-            </Text>
-            
-            <FormField
-              label="Nama Lengkap"
-              value={formData.nama}
-              onChangeText={(val) => handleInputChange('nama', val)}
-            />
-            
-            <PilihanOpsi
-              label="Jenis Kelamin"
-              options={['Laki-laki', 'Perempuan']}
-              value={formData.jenisKelamin}
-              onSelect={(val) => handleInputChange('jenisKelamin', val)}
-            />
-            
-            <FormField
-              label="NIK"
-              value={formData.nik}
-              onChangeText={(val) => handleInputChange('nik', val)}
-              keyboardType="numeric"
-            />
-            
-            <FormField
-              label="Alamat Lengkap"
-              value={formData.alamat}
-              onChangeText={(val) => handleInputChange('alamat', val)}
-            />
-            
-            <FormField
-              label="Domisili"
-              value={formData.domisili}
-              onChangeText={(val) => handleInputChange('domisili', val)}
-            />
-            
-            <PilihanOpsi
-              label="Status Pernikahan"
-              options={['Single', 'Married']}
-              value={formData.status}
-              onSelect={(val) => handleInputChange('status', val)}
-            />
-            
-            <FormField
-              label="Pendidikan Terakhir"
-              value={formData.pendidikan}
-              onChangeText={(val) => handleInputChange('pendidikan', val)}
-            />
-            
-            <FormField
-              label="Nomor Telepon"
-              value={formData.nomorTelepon}
-              onChangeText={(val) => handleInputChange('nomorTelepon', val)}
-              keyboardType="phone-pad"
-            />
-            
-            {/* KTP Upload */}
-            <View className="mb-6">
-              <Text className="text-base font-semibold text-gray-900 mb-3">
-                Upload Foto KTP
-              </Text>
-              <TouchableOpacity
-                onPress={pickImage}
-                className="bg-gray-50 rounded-2xl h-48 items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden"
-              >
-                {formData.fotoKTP ? (
-                  <Image
-                    source={{ uri: formData.fotoKTP }}
-                    className="w-full h-full rounded-2xl"
-                    resizeMode="cover"
-                  />
-                ) : (
-                  <View className="items-center">
-                    <View className="w-16 h-16 rounded-full bg-gray-200 items-center justify-center mb-3">
-                      <Ionicons name="camera-outline" size={24} color="#9CA3AF" />
-                    </View>
-                    <Text className="text-gray-500 font-medium">Ketuk untuk mengunggah KTP</Text>
-                    <Text className="text-gray-400 text-sm mt-1">JPG, PNG maksimal 5MB</Text>
-                  </View>
-                )}
-              </TouchableOpacity>
-            </View>
+          <Text className="text-xl font-bold text-gray-900 mb-6">Informasi Pribadi</Text>
 
-            {/* Terms and Conditions */}
-            <View className="flex-row items-start mb-8 p-4 bg-gray-50 rounded-xl">
-              <Checkbox
-                value={setujuSK}
-                onValueChange={setSetujuSK}
-                color={setujuSK ? '#82BFB7' : undefined}
-                style={{ width: 20, height: 20, marginRight: 12, marginTop: 2 }}
-              />
-              <Text className="text-sm text-gray-700 flex-1 leading-5">
-                Saya memahami dan menerima{' '}
-                <Text className="font-semibold text-black">Syarat & Ketentuan</Text>
-                {' '}yang berlaku serta bersedia mengikuti seluruh rangkaian kegiatan volunteer.
-              </Text>
-            </View>
+          <FormField label="Nama Lengkap" value={formData.nama} onChangeText={val => handleInputChange('nama', val)} />
+          <PilihanOpsi label="Jenis Kelamin" options={['Laki-laki', 'Perempuan']} value={formData.jenisKelamin} onSelect={val => handleInputChange('jenisKelamin', val)} />
+          <FormField label="NIK" value={formData.nik} onChangeText={val => handleInputChange('nik', val)} keyboardType="numeric" />
+          <FormField label="Alamat Lengkap" value={formData.alamat} onChangeText={val => handleInputChange('alamat', val)} />
+          <FormField label="Domisili" value={formData.domisili} onChangeText={val => handleInputChange('domisili', val)} />
+          <PilihanOpsi label="Status Pernikahan" options={['Single', 'Married']} value={formData.status} onSelect={val => handleInputChange('status', val)} />
+          <FormField label="Pendidikan Terakhir" value={formData.pendidikan} onChangeText={val => handleInputChange('pendidikan', val)} />
+          <FormField label="Nomor Telepon" value={formData.nomorTelepon} onChangeText={val => handleInputChange('nomorTelepon', val)} keyboardType="phone-pad" />
+
+          <View className="mb-6">
+            <Text className="text-base font-semibold text-gray-900 mb-3">Upload Foto KTP</Text>
+            <TouchableOpacity
+              onPress={pickImage}
+              className="bg-gray-50 rounded-2xl h-48 items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden"
+            >
+              {formData.fotoKTP ? (
+                <Image source={{ uri: formData.fotoKTP }} className="w-full h-full rounded-2xl" resizeMode="cover" />
+              ) : (
+                <View className="items-center">
+                  <View className="w-16 h-16 rounded-full bg-gray-200 items-center justify-center mb-3">
+                    <Ionicons name="camera-outline" size={24} color="#9CA3AF" />
+                  </View>
+                  <Text className="text-gray-500 font-medium">Ketuk untuk mengunggah KTP</Text>
+                  <Text className="text-gray-400 text-sm mt-1">JPG, PNG maksimal 5MB</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+
+          <View className="flex-row items-start mb-8 p-4 bg-gray-50 rounded-xl">
+            <Checkbox
+              value={setujuSK}
+              onValueChange={setSetujuSK}
+              color={setujuSK ? '#82BFB7' : undefined}
+              style={{ width: 20, height: 20, marginRight: 12, marginTop: 2 }}
+            />
+            <Text className="text-sm text-gray-700 flex-1 leading-5">
+              Saya memahami dan menerima{' '}
+              <Text className="font-semibold text-black">Syarat & Ketentuan</Text>{' '}
+              yang berlaku serta bersedia mengikuti seluruh rangkaian kegiatan volunteer.
+            </Text>
           </View>
         </View>
       </ScrollView>
 
-      <View className="px-5 py-3 bg-white border-0 border-gray-200">
-        <TouchableOpacity 
-          onPress={handleDaftar}
-          disabled={!isFormValid}
-          style={{ backgroundColor: '#82C7C1', opacity: isFormValid ? 1 : 0.5 }}
-          className="bg-[#82C7C1] py-3  rounded-full items-center justify-center "
-      {/* Submit Button */}
       <View className="px-5 py-4 bg-white border-t border-gray-100 shadow-lg">
         <TouchableOpacity
           onPress={handleDaftar}
           disabled={!isFormValid}
           style={{
             backgroundColor: isFormValid ? '#82BFB7' : '#E5E7EB',
-            opacity: 1
           }}
           className="py-4 rounded-2xl items-center justify-center shadow-sm"
         >
-          <Text 
-            style={{ color: isFormValid ? '#FFFFFF' : '#9CA3AF' }}
-            className="text-lg font-bold"
-          >
+          <Text style={{ color: isFormValid ? '#FFFFFF' : '#9CA3AF' }} className="text-lg font-bold">
             Daftar Sekarang
           </Text>
         </TouchableOpacity>
@@ -398,13 +298,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#1F2937',
-  },
-  shadow: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
 });
 
