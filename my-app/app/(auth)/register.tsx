@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Text, 
   View, 
   Alert, 
   TextInput, 
   TouchableOpacity, 
-  Image, 
   SafeAreaView,
   ScrollView,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Image,
+  StyleSheet
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -18,224 +19,194 @@ import images from '../../constants/images';
 const Register = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    
-    const [isMinLengthMet, setIsMinLengthMet] = useState(false);
-    const [hasLowercase, setHasLowercase] = useState(false);
-    const [hasUppercase, setHasUppercase] = useState(false);
-    const [hasNumber, setHasNumber] = useState(false);
     
     const router = useRouter();
 
-    useEffect(() => {
-        setIsMinLengthMet(password.length >= 8);
-        setHasLowercase(/[a-z]/.test(password));
-        setHasUppercase(/[A-Z]/.test(password));
-        setHasNumber(/\d/.test(password));
-    }, [password]);
-
-    const isPasswordValid = () => {
-        return isMinLengthMet && hasLowercase && hasUppercase && hasNumber;
-    };
-
     const handleRegister = () => {
-        if (!name || !username || !email || !password || !confirmPassword) {
-            Alert.alert('Error', 'Semua field harus diisi');
+        if (!name || !email || !password) {
+            Alert.alert('Error', 'Please fill in all fields');
             return;
         }
-        if (password !== confirmPassword) {
-            Alert.alert('Error', 'Password tidak sama');
-            return;
-        }
-        if (!isPasswordValid()) {
-            Alert.alert('Error', 'Password tidak memenuhi syarat');
-            return;
-        }
-        Alert.alert('Success', `Selamat datang, ${name}!`);
-        router.push("login");
+        Alert.alert('Success', `Welcome, ${name}!`);
+        router.push("verify-code");
     };
-
-    const renderValidationItem = (condition, text) => (
-        <View className="flex-row items-center my-1">
-            <Ionicons
-                name={condition ? "checkmark-circle" : "ellipse-outline"}
-                size={16}
-                color={condition ? "#10B981" : "#D1D5DB"}
-                style={{ marginRight: 8 }}
-            />
-            <Text className={`text-xs ${condition ? 'text-green-600' : 'text-gray-400'}`}>
-                {text}
-            </Text>
-        </View>
-    );
 
     return (
-        <SafeAreaView className="flex-1 bg-white">
-            <KeyboardAvoidingView 
-                className="flex-1" 
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            >
-                {/* Header */}
-                <View className="flex-row items-center justify-between px-6 py-4">
-                    <TouchableOpacity onPress={() => router.back()}>
-                        <Ionicons name="arrow-back" size={24} color="#1F2937" />
+        <View style={styles.container}>
+            <View style={styles.topSection}>
+                <TouchableOpacity
+                    style={styles.backButton}
+                    onPress={() => router.back()}
+                >
+                    <Ionicons name="arrow-back" size={24} color="#000" />
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.content}>
+                <Text style={styles.title}>Create account</Text>
+                
+                <View style={styles.subtitleContainer}>
+                    <Text style={styles.subtitle}>Already have an account? </Text>
+                    <TouchableOpacity onPress={() => router.push("login")}>
+                        <Text style={styles.linkText}>sign in</Text>
                     </TouchableOpacity>
-                    <Text className="text-lg font-semibold text-gray-900">Daftar</Text>
-                    <View className="w-6" />
                 </View>
 
-                <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
-                    {/* Welcome Text */}
-                    <View className="mb-6">
-                        <Text className="text-2xl font-bold text-gray-900 mb-2">
-                            Bergabunglah dengan kami
-                        </Text>
-                        <Text className="text-gray-600 text-base">
-                            Daftarkan akun untuk mulai berbagi kebaikan
-                        </Text>
+                <View style={styles.form}>
+                    {/* Name Input */}
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Name"
+                            placeholderTextColor="#9CA3AF"
+                            value={name}
+                            onChangeText={setName}
+                        />
                     </View>
 
-                    {/* Form */}
-                    <View className="space-y-4">
-                        {/* Name Input */}
-                        <View>
-                            <Text className="text-sm font-medium text-gray-700 mb-2">
-                                Nama Lengkap
-                            </Text>
-                            <TextInput 
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-base"
-                                placeholder="Masukkan nama lengkap"
+                    {/* Email Input */}
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Email or phone"
+                            placeholderTextColor="#9CA3AF"
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            value={email}
+                            onChangeText={setEmail}
+                        />
+                    </View>
+                    
+                    {/* Password Input */}
+                    <View style={styles.inputContainer}>
+                        <View style={styles.passwordWrapper}>
+                            <TextInput
+                                style={styles.passwordInput}
+                                placeholder="Password"
                                 placeholderTextColor="#9CA3AF"
-                                value={name}
-                                onChangeText={setName}
+                                secureTextEntry={!showPassword}
+                                value={password}
+                                onChangeText={setPassword}
                             />
-                        </View>
-
-                        {/* Email Input */}
-                        <View>
-                            <Text className="text-sm font-medium text-gray-700 mb-2">
-                                Email
-                            </Text>
-                            <TextInput 
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-base"
-                                placeholder="Masukkan alamat email"
-                                placeholderTextColor="#9CA3AF"
-                                keyboardType="email-address"
-                                autoCapitalize="none"
-                                value={email}
-                                onChangeText={setEmail}
-                            />
-                        </View>
-                        
-                        {/* Username Input */}
-                        <View>
-                            <Text className="text-sm font-medium text-gray-700 mb-2">
-                                Username
-                            </Text>
-                            <TextInput 
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 text-base"
-                                placeholder="Masukkan username"
-                                placeholderTextColor="#9CA3AF"
-                                autoCapitalize="none"
-                                value={username}
-                                onChangeText={setUsername}
-                            />
-                        </View>
-                        
-                        {/* Password Input */}
-                        <View>
-                            <Text className="text-sm font-medium text-gray-700 mb-2">
-                                Password
-                            </Text>
-                            <View className="relative">
-                                <TextInput 
-                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 pr-12 text-base"
-                                    placeholder="Masukkan password"
-                                    placeholderTextColor="#9CA3AF"
-                                    secureTextEntry={!showPassword}
-                                    value={password}
-                                    onChangeText={setPassword}
+                            <TouchableOpacity
+                                style={styles.eyeIcon}
+                                onPress={() => setShowPassword(!showPassword)}
+                            >
+                                <Ionicons
+                                    name={showPassword ? "eye-outline" : "eye-off-outline"}
+                                    size={20}
+                                    color="#9CA3AF"
                                 />
-                                <TouchableOpacity 
-                                    className="absolute right-4 top-4"
-                                    onPress={() => setShowPassword(!showPassword)}
-                                >
-                                    <Ionicons
-                                        name={showPassword ? "eye-outline" : "eye-off-outline"}
-                                        size={20}
-                                        color="#6B7280"
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                            
-                            {/* Password validation */}
-                            <View className="mt-3 bg-gray-50 rounded-lg p-3">
-                                <Text className="text-xs font-medium text-gray-700 mb-2">Password harus mengandung:</Text>
-                                <View className="flex-row flex-wrap">
-                                    <View className="w-1/2">
-                                        {renderValidationItem(isMinLengthMet, "Min. 8 karakter")}
-                                        {renderValidationItem(hasLowercase, "Huruf kecil")}
-                                    </View>
-                                    <View className="w-1/2">
-                                        {renderValidationItem(hasUppercase, "Huruf kapital")}
-                                        {renderValidationItem(hasNumber, "Angka")}
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                        
-                        {/* Confirm Password Input */}
-                        <View>
-                            <Text className="text-sm font-medium text-gray-700 mb-2">
-                                Konfirmasi Password
-                            </Text>
-                            <View className="relative">
-                                <TextInput 
-                                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 pr-12 text-base"
-                                    placeholder="Konfirmasi password"
-                                    placeholderTextColor="#9CA3AF"
-                                    secureTextEntry={!showConfirmPassword}
-                                    value={confirmPassword}
-                                    onChangeText={setConfirmPassword}
-                                />
-                                <TouchableOpacity 
-                                    className="absolute right-4 top-4"
-                                    onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                                >
-                                    <Ionicons
-                                        name={showConfirmPassword ? "eye-outline" : "eye-off-outline"}
-                                        size={20}
-                                        color="#6B7280"
-                                    />
-                                </TouchableOpacity>
-                            </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
 
-                    {/* Register Button */}
-                    <TouchableOpacity 
-                        className="w-full rounded-xl py-4 mt-8"
-                        style={{ backgroundColor: "#82BFB7" }}
+                    {/* Sign Up Button */}
+                    <TouchableOpacity
+                        style={styles.signUpButton}
                         onPress={handleRegister}
                     >
-                        <Text className="text-white text-base font-semibold text-center">Daftar</Text>
+                        <Text style={styles.signUpButtonText}>Sign up</Text>
+                        <Ionicons name="arrow-forward" size={20} color="white" />
                     </TouchableOpacity>
-
-                    {/* Login Link */}
-                    <View className="flex-row justify-center items-center mt-6 mb-8">
-                        <Text className="text-gray-600">Sudah punya akun? </Text>
-                        <TouchableOpacity onPress={() => router.push("login")}>
-                            <Text style={{ color: "#82BFB7" }} className="font-medium">Masuk sekarang</Text>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+                </View>
+            </View>
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#FED3DD',
+    },
+    topSection: {
+        paddingTop: 60,
+        paddingHorizontal: 20,
+        paddingBottom: 40,
+    },
+    backButton: {
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    content: {
+        flex: 1,
+        backgroundColor: 'white',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        paddingHorizontal: 24,
+        paddingTop: 40,
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: '#000',
+        marginBottom: 8,
+    },
+    subtitleContainer: {
+        flexDirection: 'row',
+        marginBottom: 40,
+    },
+    subtitle: {
+        fontSize: 14,
+        color: '#666',
+    },
+    linkText: {
+        fontSize: 14,
+        color: '#82BFB7',
+        fontWeight: '500',
+    },
+    form: {
+        flex: 1,
+    },
+    inputContainer: {
+        marginBottom: 20,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#E5E5E5',
+        borderRadius: 25,
+        paddingHorizontal: 20,
+        height: 50,
+        fontSize: 16,
+        color: '#000',
+    },
+    passwordWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#E5E5E5',
+        borderRadius: 25,
+        paddingHorizontal: 20,
+        height: 50,
+    },
+    passwordInput: {
+        flex: 1,
+        fontSize: 16,
+        color: '#000',
+    },
+    eyeIcon: {
+        padding: 5,
+    },
+    signUpButton: {
+        backgroundColor: '#82BFB7',
+        borderRadius: 25,
+        height: 50,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    signUpButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
+        marginRight: 8,
+    },
+});
 
 export default Register;

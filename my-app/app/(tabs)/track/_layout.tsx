@@ -15,7 +15,7 @@ const TrackLayout = () => {
                 headerTitleStyle: { 
                     fontWeight: 'bold',
                 },
-                headerShadowVisible: true, // Menghilangkan bayangan di bawah header
+                headerShadowVisible: false, // Menghilangkan bayangan di bawah header
             }}>
             <Stack.Screen
                 name="index"

@@ -8,9 +8,11 @@ import {
   Modal,
   Image,
   FlatList,
+  StyleSheet,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import images from '../../../constants/images';
 
 // Updated prayer data with better content
 const prayersData = [
@@ -157,7 +159,10 @@ const PrayersScreen = () => {
         </View>
         
         <TouchableOpacity className="px-4 py-2 rounded-full" style={{ backgroundColor: '#82BFB7' }}>
-          <Text className="font-semibold text-sm text-white">🙏🏻 Aamiin</Text>
+          <View className="flex-row items-center">
+            <Image source={images.pray} className="w-4 h-4 mr-1" resizeMode="contain" />
+            <Text className="font-semibold text-sm text-white">Aamiin</Text>
+          </View>
         </TouchableOpacity>
       </View>
     </View>
@@ -186,12 +191,18 @@ const PrayersScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       {/* Header */}
       <View className="bg-white">
-        <View className="flex-row items-center justify-between px-6 py-4">
-          <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#1F2937" />
+        <View style={styles.headerTop}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Image 
+              source={images.back} 
+              style={styles.backIcon} 
+              resizeMode="contain" 
+            />
           </TouchableOpacity>
-          <Text className="text-xl font-bold text-gray-900">Doa-doa #OrangBaik</Text>
-          <View className="w-6" />
+          <Text style={styles.headerTitle}>Doa-doa #OrangBaik</Text>
         </View>
 
         {/* Tabs */}
@@ -218,7 +229,7 @@ const PrayersScreen = () => {
             className="flex-row items-center"
             onPress={() => setShowFilterModal(true)}
           >
-            <Ionicons name="funnel-outline" size={16} color="#9CA3AF" />
+            <Image source={images.filter} className="w-4 h-4" resizeMode="contain" />
             <Text className="text-sm text-gray-600 ml-1">Urutan: {selectedFilter}</Text>
           </TouchableOpacity>
         </View>
@@ -295,5 +306,29 @@ const PrayersScreen = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 12,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#374151',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F2937',
+  },
+});
 
 export default PrayersScreen;

@@ -8,10 +8,10 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { Link, Stack } from 'expo-router';
-import images from '../../../constants/images'; // Pastikan path ini benar
-import icons from '../../../constants/icons';   // Pastikan path ini benar
-
-// --- DATA DUMMY UNTUK DONOR ASI ---
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import images from '../../../constants/images';
+import icons from '../../../constants/icons';
 
 // Data untuk daftar lokasi/rumah sakit
 const locationData = [
@@ -20,32 +20,30 @@ const locationData = [
     name: 'RS EMC Sentul',
     address: 'Jl. MH. Thamrin Kav. 57, Sentul City, Bogor, Jawa Barat',
     slots: 5,
-    image: images.EMC_sentul, // Ganti dengan gambar yang sesuai
+    image: images.EMC_sentul,
   },
   {
     id: '2',
     name: 'Siloam Hospitals Bogor',
     address: 'Jl. Raya Pajajaran No.27, Babakan, Bogor Tengah, Kota Bogor, Jawa Barat',
     slots: 10,
-    image: images.EMC_sentul, // Ganti dengan gambar yang sesuai
+    image: images.EMC_sentul,
   },
   {
     id: '3',
     name: 'Mayapada Hospital',
     address: 'Jl. Pajajaran Indah V No.97, Baranangsiang, Jawa Barat',
     slots: 8,
-    image: images.EMC_sentul, // Ganti dengan gambar yang sesuai
+    image: images.EMC_sentul,
   },
 ];
 
-// Data untuk manfaat bagi pendonor
 const donorBenefitsData = [
   { id: '1', text: 'Mengurangi risiko kanker payudara dan ovarium', icon: icons.jantung },
   { id: '2', text: 'Membantu pemulihan rahim pasca melahirkan', icon: icons.jantung },
   { id: '3', text: 'Membantu menurunkan berat badan', icon: icons.jantung },
 ];
 
-// Data untuk manfaat bagi penerima
 const recipientBenefitsData = [
   { id: '1', text: 'Peningkatan sistem kekebalan tubuh bayi', icon: icons.jantung},
   { id: '2', text: 'Perkembangan otak yang lebih baik', icon: icons.jantung },
@@ -91,61 +89,90 @@ const BenefitItem = ({ item }) => (
 // --- HALAMAN UTAMA DONOR ASI ---
 
 const DonorAsiScreen = () => {
+  const router = useRouter();
+
   return (
     <SafeAreaView className="flex-1 bg-[#fff]">
-      {/* --- PERUBAHAN 1: Konfigurasi header dari layout agar transparan --- */}
       <Stack.Screen 
         options={{
-          headerTransparent: true, // Membuat header transparan
-          headerTitle: "", // Menghilangkan judul default
-          headerShadowVisible: false,
-          // Tombol back akan di-handle oleh _layout.tsx Anda,
-          // atau bisa ditambahkan di sini jika perlu
+          headerShown: false,
         }} 
       />
       
-      {/* --- PERUBAHAN 2: Gunakan ScrollView sebagai container utama --- */}
+      {/* Header - Same as donordarah page */}
+      <View className="bg-white px-4 py-3">
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingTop: 50,
+          paddingBottom: 20,
+        }}>
+          <TouchableOpacity 
+            style={{
+              padding: 8,
+              marginRight: 12,
+            }}
+            onPress={() => router.back()}
+          >
+            <Image 
+              source={images.back} 
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: '#374151',
+              }}
+              resizeMode="contain" 
+            />
+          </TouchableOpacity>
+          <Text style={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: '#1F2937',
+          }}>Donor ASI</Text>
+        </View>
+      </View>
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        
-        {/* --- PERUBAHAN 3: Spacer untuk memberi ruang di bawah header transparan --- */}
-        <View className="h-[20px]" />
+        {/* Content */}
+        <View className="bg-white">
+          <View className="h-[20px]" />
 
-        {/* Hero Section */}
-        <View className="px-5">
-            
-                <Text className="text-xl font-bold text-gray-800 mb-2">Satu Tetes untuk Harapan</Text>
-                <Image 
-                    source={images.bayi_prematur}
-                    className="w-full h-48 rounded-lg"
-                    resizeMode="cover"
-                />
+          {/* Hero Section */}
+          <View className="px-5">
+            <Text className="text-xl font-bold text-gray-800 mb-2">Satu Tetes untuk Harapan</Text>
+            <Image 
+                source={images.bayi_prematur}
+                className="w-full h-48 rounded-lg"
+                resizeMode="cover"
+            />
+          </View>
+
+          {/* Location List Section */}
+          <View className="px-5 mt-6">
+            <Text className="text-xl font-bold text-gray-800 mb-4">Temukan Lokasi Donor Asi di Sekitar Anda.</Text>
+            {locationData.map(item => (
+              <LocationCard key={item.id} item={item} />
+            ))}
+          </View>
+
+          {/* Benefits Section */}
+          <View className="px-5 mt-2 mb-8">
+              <View className="bg-white rounded-2xl p-4 shadow-md">
+                  {/* Manfaat bagi Pendonor */}
+                  <Text className="text-xl font-bold text-gray-800 mb-2">Manfaat Donor Asi</Text>
+                  {donorBenefitsData.map(item => (
+                      <BenefitItem key={item.id} item={item} />
+                  ))}
+
+                  {/* Manfaat bagi Penerima */}
+                  <Text className="text-xl font-bold text-gray-800 mt-6 mb-2">Manfaat Donor Asi bagi Penerima Donor</Text>
+                  {recipientBenefitsData.map(item => (
+                      <BenefitItem key={item.id} item={item} />
+                  ))}
+              </View>
+          </View>
+
         </View>
-
-        {/* Location List Section */}
-        <View className="px-5 mt-6">
-          <Text className="text-xl font-bold text-gray-800 mb-4">Temukan Lokasi Donor Asi di Sekitar Anda.</Text>
-          {locationData.map(item => (
-            <LocationCard key={item.id} item={item} />
-          ))}
-        </View>
-
-        {/* Benefits Section */}
-        <View className="px-5 mt-2 mb-8">
-            <View className="bg-white rounded-2xl p-4 shadow-md">
-                {/* Manfaat bagi Pendonor */}
-                <Text className="text-xl font-bold text-gray-800 mb-2">Manfaat Donor Asi</Text>
-                {donorBenefitsData.map(item => (
-                    <BenefitItem key={item.id} item={item} />
-                ))}
-
-                {/* Manfaat bagi Penerima */}
-                <Text className="text-xl font-bold text-gray-800 mt-6 mb-2">Manfaat Donor Asi bagi Penerima Donor</Text>
-                {recipientBenefitsData.map(item => (
-                    <BenefitItem key={item.id} item={item} />
-                ))}
-            </View>
-        </View>
-
       </ScrollView>
     </SafeAreaView>
   );

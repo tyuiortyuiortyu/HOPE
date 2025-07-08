@@ -1,11 +1,10 @@
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState, useMemo } from 'react';
-import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, SafeAreaView, Alert, Modal, Pressable, Platform } from 'react-native';
+import { View, Text, ScrollView, Image, TextInput, TouchableOpacity, SafeAreaView, Alert, Modal, Pressable, Platform, StyleSheet, StatusBar } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 import images from '../../../constants/images';
 
 const syaratData = [
@@ -35,10 +34,10 @@ const formFields = [
 ];
 
 const FormField = ({ label, placeholder, keyboardType = 'default', value, onChangeText }) => (
-  <View style={{ marginBottom: 16 }}>
-    <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 8, color: '#374151' }}>{label}</Text>
-    <TextInput 
-      style={{ backgroundColor: '#F3F4F6', borderRadius: 10, paddingHorizontal: 16, paddingVertical: 12, fontSize: 16, color: '#1F2937', borderWidth: 1, borderColor: '#D1D5DB' }}
+  <View className="mb-5">
+    <Text className="text-base font-semibold text-gray-900 mb-3">{label}</Text>
+    <TextInput
+      className="bg-white rounded-xl px-4 py-4 text-base border border-gray-200 shadow-sm"
       placeholder={placeholder}
       placeholderTextColor="#9CA3AF"
       keyboardType={keyboardType}
@@ -49,16 +48,15 @@ const FormField = ({ label, placeholder, keyboardType = 'default', value, onChan
 );
 
 const SyaratItem = ({ text }) => (
-  <View style={{ flexDirection: 'row', marginBottom: 8 }}>
-    <Text style={{ marginRight: 8, color: '#4B5563' }}>•</Text>
-    <Text style={{ flex: 1, fontSize: 16, color: '#4B5563', lineHeight: 24 }}>{text}</Text>
+  <View className="flex-row items-start mb-2">
+    <Text className="text-gray-500 mr-2">•</Text>
+    <Text className="flex-1 text-sm text-gray-600 leading-5">{text}</Text>
   </View>
 );
 
 const PendaftaranDonorDarahScreen = () => {
   const router = useRouter();
-  const { eventTitle } = useLocalSearchParams();
-  const { eventId, evenDate, evenAddress, evenImage } = useLocalSearchParams();
+  const { eventTitle, eventId, evenDate, evenAddress, evenImage } = useLocalSearchParams();
 
   const [formData, setFormData] = useState({});
   const [jenisKelamin, setJenisKelamin] = useState('');
@@ -98,36 +96,104 @@ const PendaftaranDonorDarahScreen = () => {
     setIsSubmitted(true);
   };
 
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <Stack.Screen options={{ headerStyle: { backgroundColor: '#D9EEEB' }, headerTitle: '', headerLeft: () => (<TouchableOpacity onPress={() => router.back()}><Ionicons name="arrow-back" size={28} color="black" /></TouchableOpacity>) }} />
-
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 32 }}>
-        {isSubmitted ? (
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 }}>
-            <Ionicons name="checkmark-circle" size={80} color="#10B981" style={{ marginBottom: 16 }} />
-            <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#1F2937', textAlign: 'center', marginBottom: 8 }}>Pendaftaran Berhasil</Text>
-            <Text style={{ fontSize: 16, color: '#4B5563', textAlign: 'center', marginBottom: 24 }}>Terima kasih telah mendaftar untuk kegiatan donor darah.</Text>
-            <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#82C7C1', paddingVertical: 12, paddingHorizontal: 24, borderRadius: 999 }}>
-              <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Kembali</Text>
+  // Success screen
+  if (isSubmitted) {
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+        
+        {/* Header */}
+        <View className="bg-white px-4 py-3">
+          <View style={styles.headerTop}>
+            <TouchableOpacity 
+              style={styles.backButton}
+              onPress={() => router.back()}
+            >
+              <Image 
+                source={images.back} 
+                style={styles.backIcon} 
+                resizeMode="contain" 
+              />
             </TouchableOpacity>
+            <Text style={styles.headerTitle}>Pendaftaran Berhasil</Text>
           </View>
-        ) : (
-          <>
-            <Image source={evenImage} style={{ width: '100%', height: 220 }} resizeMode="cover" />
-            <View style={{ padding: 20 }}>
-              <View style={{ marginBottom: 24 }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1F2937', marginBottom: 8 }}>{eventTitle || 'Kegiatan Donor Darah'}</Text>
-            <Text style={{ fontSize: 16, color: '#4B5563', lineHeight: 24 }}>{eventTitle} mengadakan kegiatan donor darah dan mengajak Anda untuk berpartisipasi dalam kegiatan donor darah yang akan diselenggarakan pada {evenDate} pukul 09.00 - 17.00 di {evenAddress} Setetes darah Anda sangat berarti untuk menyelamatkan nyawa sesama. Mari berbagi kebaikan dan wujudkan kepedulian kita terhadap sesama melalui aksi donor darah ini.</Text>
+        </View>
+
+        <View className="flex-1 items-center justify-center p-8">
+          <Image source={images.done} className="w-20 h-20 mb-4" resizeMode="contain" />
+          <Text className="text-2xl font-bold text-center mb-2">Pendaftaran Berhasil!</Text>
+          <Text className="text-base text-gray-600 text-center mb-6">
+            Terima kasih telah mendaftar untuk kegiatan donor darah.
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={{ backgroundColor: '#82C7C1' }}
+            className="py-3 px-8 rounded-full"
+          >
+            <Text className="text-white font-bold text-base">Kembali</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  // Main form screen
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#FFF6F6" />
+      
+      {/* Header */}
+      <View className="bg-white px-4 py-3">
+        <View style={styles.headerTop}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Image 
+              source={images.back} 
+              style={styles.backIcon} 
+              resizeMode="contain" 
+            />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Pendaftaran Donor Darah</Text>
+        </View>
+      </View>
+
+      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+        {/* Hero Image */}
+        <View className="relative">
+          <Image
+            source={evenImage}
+            className="w-full h-64"
+            resizeMode="cover"
+          />
+          <View className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 to-transparent h-20" />
+        </View>
+
+        {/* Content */}
+        <View className="px-5 py-6 bg-white -mt-6 mx-4 rounded-t-3xl shadow-lg">
+          {/* Event Details */}
+          <View className="mb-6">
+            <Text className="text-xl font-bold text-gray-900 mb-4">{eventTitle || 'Kegiatan Donor Darah'}</Text>
+            <Text className="text-sm text-gray-700 leading-5">
+              {eventTitle} mengadakan kegiatan donor darah dan mengajak Anda untuk berpartisipasi dalam kegiatan donor darah yang akan diselenggarakan pada {evenDate} pukul 09.00 - 17.00 di {evenAddress}. Setetes darah Anda sangat berarti untuk menyelamatkan nyawa sesama.
+            </Text>
           </View>
 
-          <View style={{ marginBottom: 24 }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1F2937', marginBottom: 12 }}>Syarat & Ketentuan</Text>
-            {syaratData.map((syarat, i) => <SyaratItem key={i} text={syarat} />)}
+          <View className="border-b border-gray-100 mb-6" />
+
+          {/* Syarat & Ketentuan */}
+          <View className="mb-6">
+            <Text className="text-lg font-bold text-gray-900 mb-4">Syarat & Ketentuan</Text>
+            <View className="bg-gray-50 rounded-xl p-4">
+              {syaratData.map((syarat, i) => <SyaratItem key={i} text={syarat} />)}
+            </View>
           </View>
 
-          <View style={{ marginBottom: 24 }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1F2937', marginBottom: 16 }}>Form Pendaftaran</Text>
+          {/* Form */}
+          <View>
+            <Text className="text-xl font-bold text-gray-900 mb-6">Informasi Pribadi</Text>
+            
             {formFields.map(field => (
               <FormField
                 key={field.name}
@@ -140,24 +206,24 @@ const PendaftaranDonorDarahScreen = () => {
             ))}
 
             {/* Jenis Kelamin */}
-            <View style={{ marginBottom: 16 }}>
-              <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 8, color: '#374151' }}>Jenis Kelamin</Text>
+            <View className="mb-5">
+              <Text className="text-base font-semibold text-gray-900 mb-3">Jenis Kelamin</Text>
               <TouchableOpacity
                 onPress={() => setShowGenderModal(true)}
-                style={{ backgroundColor: '#F3F4F6', borderRadius: 10, padding: 12, borderWidth: 1, borderColor: '#D1D5DB' }}>
-                <Text style={{ fontSize: 16, color: '#1F2937' }}>{jenisKelamin || 'Pilih Jenis Kelamin'}</Text>
+                className="bg-white rounded-xl px-4 py-4 border border-gray-200 shadow-sm">
+                <Text className="text-base text-gray-900">{jenisKelamin || 'Pilih Jenis Kelamin'}</Text>
               </TouchableOpacity>
               <Modal visible={showGenderModal} transparent animationType="slide">
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#00000080' }}>
-                  <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 12, width: '80%' }}>
-                    <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 16 }}>Pilih Jenis Kelamin</Text>
+                <View className="flex-1 justify-center items-center bg-black/50">
+                  <View className="bg-white p-6 rounded-xl w-4/5">
+                    <Text className="text-lg font-bold mb-4">Pilih Jenis Kelamin</Text>
                     {['Laki-laki', 'Perempuan'].map((option) => (
-                      <Pressable key={option} onPress={() => { setJenisKelamin(option); setShowGenderModal(false); }} style={{ paddingVertical: 10 }}>
-                        <Text style={{ fontSize: 16 }}>{option}</Text>
+                      <Pressable key={option} onPress={() => { setJenisKelamin(option); setShowGenderModal(false); }} className="py-3">
+                        <Text className="text-base">{option}</Text>
                       </Pressable>
                     ))}
-                    <Pressable onPress={() => setShowGenderModal(false)} style={{ marginTop: 16 }}>
-                      <Text style={{ color: 'red', textAlign: 'center' }}>Batal</Text>
+                    <Pressable onPress={() => setShowGenderModal(false)} className="mt-4">
+                      <Text className="text-red-500 text-center">Batal</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -165,62 +231,118 @@ const PendaftaranDonorDarahScreen = () => {
             </View>
 
             {/* Tanggal Lahir */}
-            <View style={{ marginBottom: 16 }}>
-              <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 8, color: '#374151' }}>Tanggal Lahir</Text>
+            <View className="mb-5">
+              <Text className="text-base font-semibold text-gray-900 mb-3">Tanggal Lahir</Text>
               <TouchableOpacity
                 onPress={() => setShowDatePicker(true)}
-                style={{ backgroundColor: '#F3F4F6', borderRadius: 10, padding: 12, borderWidth: 1, borderColor: '#D1D5DB' }}>
-                <Text style={{ fontSize: 16, color: '#1F2937' }}>{tanggalLahir.toLocaleDateString('id-ID')}</Text>
+                className="bg-white rounded-xl px-4 py-4 border border-gray-200 shadow-sm">
+                <Text className="text-base text-gray-900">{tanggalLahir.toLocaleDateString('id-ID')}</Text>
               </TouchableOpacity>
               {showDatePicker && (
-                  <DateTimePicker
-                    value={tanggalLahir}
-                    mode="date"
-                    display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
-                    onChange={(event, selectedDate) => {
-                      setShowDatePicker(false);
-                      if (selectedDate) setTanggalLahir(selectedDate);
-                    }}
-                    themeVariant="light"
-                  />
-                )}
+                <DateTimePicker
+                  value={tanggalLahir}
+                  mode="date"
+                  display={Platform.OS === 'ios' ? 'spinner' : 'calendar'}
+                  onChange={(event, selectedDate) => {
+                    setShowDatePicker(false);
+                    if (selectedDate) setTanggalLahir(selectedDate);
+                  }}
+                  themeVariant="light"
+                />
+              )}
             </View>
 
-            {/* Upload KTP */}
-            <View style={{ marginBottom: 24 }}>
-              <Text style={{ fontSize: 14, fontWeight: '600', marginBottom: 8, color: '#374151' }}>Upload Foto KTP</Text>
-              <TouchableOpacity onPress={handleImageUpload} style={{ backgroundColor: '#F3F4F6', borderRadius: 16, height: 160, justifyContent: 'center', alignItems: 'center', borderStyle: 'dashed', borderColor: '#D1D5DB', borderWidth: 2, overflow: 'hidden' }}>
+            {/* KTP Upload */}
+            <View className="mb-6">
+              <Text className="text-base font-semibold text-gray-900 mb-3">Upload Foto KTP</Text>
+              <TouchableOpacity
+                onPress={handleImageUpload}
+                className="bg-gray-50 rounded-2xl h-48 items-center justify-center border-2 border-dashed border-gray-300 overflow-hidden"
+              >
                 {ktpImage ? (
-                  <Image source={{ uri: ktpImage }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+                  <Image
+                    source={{ uri: ktpImage }}
+                    className="w-full h-full rounded-2xl"
+                    resizeMode="cover"
+                  />
                 ) : (
-                  <>
-                    <Ionicons name="camera-outline" size={40} color="#9CA3AF" />
-                    <Text style={{ color: '#6B7280', marginTop: 8 }}>Ketuk untuk mengunggah</Text>
-                  </>
+                  <View className="items-center">
+                    <View className="w-16 h-16 rounded-full bg-gray-200 items-center justify-center mb-3">
+                      <Ionicons name="camera-outline" size={24} color="#9CA3AF" />
+                    </View>
+                    <Text className="text-gray-500 font-medium">Ketuk untuk mengunggah KTP</Text>
+                    <Text className="text-gray-400 text-sm mt-1">JPG, PNG maksimal 5MB</Text>
+                  </View>
                 )}
               </TouchableOpacity>
             </View>
 
-            {/* Checkbox */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 24 }}>
-              <Checkbox value={isChecked} onValueChange={setIsChecked} color={isChecked ? '#82C7C1' : undefined} style={{ width: 24, height: 24, marginRight: 12 }} />
-              <Text style={{ flex: 1, fontSize: 16, color: '#374151' }}>Saya telah membaca dan menyetujui Syarat & Ketentuan.</Text>
+            {/* Terms and Conditions */}
+            <View className="flex-row items-start mb-8 p-4 bg-gray-50 rounded-xl">
+              <Checkbox
+                value={isChecked}
+                onValueChange={setIsChecked}
+                color={isChecked ? '#82C7C1' : undefined}
+                style={{ width: 20, height: 20, marginRight: 12, marginTop: 2 }}
+              />
+              <Text className="text-sm text-gray-700 flex-1 leading-5">
+                Saya telah membaca dan menyetujui{' '}
+                <Text className="font-semibold text-black">Syarat & Ketentuan</Text>
+                {' '}yang berlaku.
+              </Text>
             </View>
-
-            {/* Tombol Daftar */}
-            <TouchableOpacity
-              onPress={handleDaftar}
-              disabled={!isFormValid}
-              style={{ backgroundColor: '#82C7C1', paddingVertical: 16, borderRadius: 999, alignItems: 'center', opacity: isFormValid ? 1 : 0.5, marginBottom: 32 }}>
-              <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>Daftar</Text>
-            </TouchableOpacity>
           </View>
-            </View>
-          </>
-        )}
+        </View>
       </ScrollView>
+
+      {/* Submit Button */}
+      <View className="px-5 py-4 bg-white border-t border-gray-100 shadow-lg">
+        <TouchableOpacity
+          onPress={handleDaftar}
+          disabled={!isFormValid}
+          style={{
+            backgroundColor: isFormValid ? '#82C7C1' : '#E5E7EB',
+            opacity: 1
+          }}
+          className="py-4 rounded-2xl items-center justify-center shadow-sm"
+        >
+          <Text 
+            style={{ color: isFormValid ? '#FFFFFF' : '#9CA3AF' }}
+            className="text-lg font-bold"
+          >
+            Daftar Sekarang
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+  },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 50,
+    paddingBottom: 20,
+  },
+  backButton: {
+    padding: 8,
+    marginRight: 12,
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    tintColor: '#374151',
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F2937',
+  },
+});
 
 export default PendaftaranDonorDarahScreen;
